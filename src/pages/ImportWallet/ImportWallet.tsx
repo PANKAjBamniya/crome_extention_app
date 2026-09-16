@@ -217,7 +217,6 @@ const ImportWallet = () => {
                         </p>
                     </div>
 
-                    {/* Import Type Tabs */}
                     <div className="mb-4 flex rounded-xl border border-white/10 bg-[#121315] p-1">
                         <button
                             type="button"
@@ -225,7 +224,7 @@ const ImportWallet = () => {
                                 setImportType('mnemonic')
                                 setError('')
                             }}
-                            className={`flex-1 rounded-lg py-1.5 text-xs font-medium transition-all ${importType === 'mnemonic'
+                            className={`flex-1 rounded-lg py-3 text-xs font-medium transition-all ${importType === 'mnemonic'
                                 ? 'bg-[#C7F11D] text-black font-semibold'
                                 : 'text-gray-400 hover:text-white'
                                 }`}

@@ -15,9 +15,9 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState, AppDispatch } from '../../store'
 import { setWalletAddress, setAccounts } from '../../store/slices/walletSlice'
-import { getWalletAddress, getStoredAccounts, setActiveAccount } from '../../services/walletVault'
+import { getWalletAddress, getStoredAccounts } from '../../services/walletVault'
 import HomeHeader from '../../components/Header/HomeHeader'
-import AccountBottomSheet, { AccountItem } from '../../components/sheets/AccountBottomSheet'
+import type { AccountItem } from '../../store/slices/walletSlice'
 import { truncateEnd } from '../../utils/helpers'
 import {
     EVM_NETWORKS,
@@ -25,8 +25,9 @@ import {
 } from '../../config/networks'
 import { getActiveNetworkId, setActiveNetworkId } from '../../services/walletStorage'
 import SelectNetworkSheet from '../../components/sheets/SelectNetworkSheet/SelectNetworkSheet'
-import { getEVMClient } from '../../services/blockchain/evmClient'
-import { formatEther } from 'viem'
+import { useAssets } from '../../hooks/useAssets'
+import AssetList from '../../components/assets/AssetList'
+import AddTokenButton from '../../components/assets/AddTokenButton'
 
 const Wallet = () => {
     const navigate = useNavigate()
@@ -34,7 +35,6 @@ const Wallet = () => {
 
     const [showBalance, setShowBalance] = useState(true)
     const [copied, setCopied] = useState(false)
-    const [isAccountSheetOpen, setIsAccountSheetOpen] = useState(false)
     const [isNetworkSheetOpen, setIsNetworkSheetOpen] = useState(false);
     const [activeNetwork, setActiveNetwork] = useState<EVMNetwork>(
         EVM_NETWORKS[0]
@@ -78,57 +78,10 @@ const Wallet = () => {
     const accounts = reduxAccounts.length > 0 ? reduxAccounts : storedAccounts
     const displayAddress = walletAddress ? truncateEnd(walletAddress, 10) : '—'
 
-    const handleSelectAccount = async (account: AccountItem) => {
-        await setActiveAccount(account.address, account.walletName)
-        setStoredAddress(account.address)
-        setStoredWalletName(account.walletName)
-        dispatch(setWalletAddress({ address: account.address, walletName: account.walletName }))
-    }
-
-    const assets = [
-        {
-            symbol: 'ETH',
-            name: 'Ethereum',
-            balance: '0.00 ETH',
-            value: '$0.00',
-        },
-        {
-            symbol: 'MST',
-            name: 'MST Blockchain',
-            balance: '0.00 MST',
-            value: '$0.00',
-        },
-        {
-            symbol: 'USDT',
-            name: 'Tether USD',
-            balance: '0.00 USDT',
-            value: '$0.00',
-        },
-    ]
-
-
-    const [nativeBalance, setNativeBalance] = useState('0.00')
-
-    useEffect(() => {
-        if (!walletAddress) return
-
-        const loadBalance = async () => {
-            try {
-                const client = getEVMClient(activeNetwork)
-
-                const balance = await client.getBalance({
-                    address: walletAddress as `0x${string}`,
-                })
-
-                setNativeBalance(formatEther(balance))
-            } catch (error) {
-                console.error('Failed to fetch balance:', error)
-                setNativeBalance('0.00')
-            }
-        }
-
-        loadBalance()
-    }, [walletAddress, activeNetwork])
+    const { assets, isLoading, nativeBalance, deleteCustomToken } = useAssets(
+        activeNetwork,
+        walletAddress
+    )
 
 
     return (
@@ -139,7 +92,7 @@ const Wallet = () => {
                     address={walletAddress}
                     walletName={walletName}
                     activeNetwork={activeNetwork}
-                    onAccountClick={() => setIsAccountSheetOpen(true)}
+                    onAccountClick={() => navigate('/accounts')}
                     onNetworkClick={() => setIsNetworkSheetOpen(true)}
                     onSettingsClick={() => navigate('/settings')}
                 />
@@ -252,7 +205,6 @@ const Wallet = () => {
 
                     {/* Assets */}
                     <div className="mt-7">
-
                         <div className="mb-3 flex items-center justify-between">
                             <h2 className="text-sm font-semibold">
                                 Assets
@@ -260,61 +212,25 @@ const Wallet = () => {
 
                             <button
                                 type="button"
-                                className="text-[10px] text-[#C7F11D]"
+                                onClick={() => navigate('/assets')}
+                                className="text-[10px] text-[#C7F11D] hover:underline"
                             >
                                 View all
                             </button>
                         </div>
 
-                        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0D0D0D]">
+                        <AssetList
+                            assets={assets}
+                            isLoading={isLoading}
+                            showBalance={showBalance}
+                            onDelete={deleteCustomToken}
+                        />
 
-                            {assets.map((asset, index) => (
-                                <button
-                                    key={asset.symbol}
-                                    type="button"
-                                    className={`flex w-full items-center justify-between px-4 py-4 text-left hover:bg-white/[0.03] ${index !== assets.length - 1
-                                        ? 'border-b border-white/5'
-                                        : ''
-                                        }`}
-                                >
-
-                                    <div className="flex items-center gap-3">
-
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#181818] text-xs font-bold text-[#C7F11D]">
-                                            {asset.symbol.slice(0, 1)}
-                                        </div>
-
-                                        <div>
-                                            <p className="text-xs font-semibold">
-                                                {asset.name}
-                                            </p>
-
-                                            <p className="mt-1 text-[10px] text-gray-500">
-                                                {asset.symbol}
-                                            </p>
-                                        </div>
-
-                                    </div>
-
-                                    <div className="text-right">
-                                        <p className="text-xs font-medium">
-                                            {showBalance
-                                                ? asset.balance
-                                                : '••••••'}
-                                        </p>
-
-                                        <p className="mt-1 text-[10px] text-gray-500">
-                                            {showBalance
-                                                ? asset.value
-                                                : '••••'}
-                                        </p>
-                                    </div>
-
-                                </button>
-                            ))}
-
+                        <div className="mt-3">
+                            <AddTokenButton
+                                onClick={() => navigate('/import-token')}
+                            />
                         </div>
-
                     </div>
                 </main>
 
@@ -359,15 +275,6 @@ const Wallet = () => {
                 </div>
 
             </div>
-
-            <AccountBottomSheet
-                isOpen={isAccountSheetOpen}
-                onClose={() => setIsAccountSheetOpen(false)}
-                activeAddress={walletAddress}
-                activeWalletName={walletName}
-                accounts={accounts}
-                onSelectAccount={handleSelectAccount}
-            />
 
             <SelectNetworkSheet
                 isOpen={isNetworkSheetOpen}

@@ -64,8 +64,19 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
             >
                 <div className="min-w-0 flex flex-col items-start">
                     <h1 className="text-sm font-semibold text-white truncate leading-tight flex gap-1.5 items-center">
-                        <span>👋 Hello, {walletName || 'Account 1'}!</span>
-                        <ChevronDown size={14} className="text-gray-400 group-hover:text-[#C7F11D] transition-colors" />
+                        <span>
+                            👋 Hello,{' '}
+                            {walletName
+                                ? walletName.length > 7
+                                    ? `${walletName.slice(0, 7)}...`
+                                    : walletName
+                                : 'Account 1'}
+                        </span>
+
+                        <ChevronDown
+                            size={14}
+                            className="text-gray-400 group-hover:text-[#C7F11D] transition-colors"
+                        />
                     </h1>
 
                     <div className="mt-1 flex items-center gap-1.5">

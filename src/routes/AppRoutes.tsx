@@ -12,6 +12,9 @@ import RevealMnemonic from '../pages/RevealMnemonic/RevealMnemonic'
 import WalletReady from '../pages/WalletReady/WalletReady'
 import Wallet from '../pages/Wallet/Wallet'
 import Unlock from '../pages/Unlock/Unlock'
+import Assets from '../pages/Assets/Assets'
+import ImportToken from '../pages/Assets/ImportToken'
+import Accounts from '../pages/Accounts/Accounts'
 import ComingSoon from '../components/ComingSoon/ComingSoon'
 
 const StartupGuard = () => {
@@ -69,7 +72,6 @@ const OnboardingGuard = () => {
         return <div className="h-screen w-full bg-black" />
     }
 
-    // If wallet already exists, do not show onboarding
     if (hasWallet && !isUnlocked) {
         return <Navigate to="/unlock" replace />
     }
@@ -122,6 +124,9 @@ const AppRoutes = () => {
                 <Route path="/onboarding" element={<OnboardingGuard />} />
                 <Route path="/unlock" element={<Unlock />} />
                 <Route path="/wallet" element={<ProtectedWalletRoute />} />
+                <Route path="/accounts" element={<Accounts />} />
+                <Route path="/assets" element={<Assets />} />
+                <Route path="/import-token" element={<ImportToken />} />
                 <Route path="/create-wallet" element={<CreateWallet />} />
                 <Route path="/import-wallet" element={<ImportWallet />} />
                 <Route path="/create-password" element={<CreatePassword />} />
