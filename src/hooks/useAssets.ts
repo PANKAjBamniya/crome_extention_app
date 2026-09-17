@@ -2,14 +2,14 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState, AppDispatch } from '../store'
 import type { EVMNetwork } from '../config/networks'
+import { getNetworkByChainId, EVM_NETWORKS } from '../config/networks'
 import type { AssetItem, Token } from '../types/token'
 import { getEVMClient } from '../services/blockchain/evmClient'
 import { getTokenBalance } from '../services/token/erc20'
-import { getBuiltInTokens } from '../services/token/tokenRegistry'
 import {
-    getTokens as getStoredCustomTokens,
-    removeToken as removeStoredToken,
-    saveToken as saveStoredToken,
+    getActiveTokens as getStoredActiveTokens,
+    removeActiveToken as removeStoredToken,
+    saveActiveToken as saveStoredToken,
 } from '../services/token/tokenStorage'
 import { resolveTokenLogo } from '../services/token/tokenLogoService'
 import {
@@ -18,7 +18,6 @@ import {
     addCustomToken,
 } from '../store/slices/tokenSlice'
 import { formatTokenAmount } from '../utils/token/formatTokenAmount'
-import { normalizeAddress } from '../utils/token/normalizeToken'
 
 export interface UseAssetsResult {
     assets: AssetItem[]
@@ -44,10 +43,9 @@ export const useAssets = (
     const walletAddressRef = useRef(walletAddress)
     walletAddressRef.current = walletAddress
 
-    // 1. Sync custom tokens from storage for this chain
     useEffect(() => {
         let isMounted = true
-        getStoredCustomTokens(network.chainId).then((tokens) => {
+        getStoredActiveTokens().then((tokens) => {
             if (isMounted) {
                 dispatch(setCustomTokens(tokens))
             }
@@ -55,9 +53,8 @@ export const useAssets = (
         return () => {
             isMounted = false
         }
-    }, [network.chainId, dispatch])
+    }, [dispatch])
 
-    // 2. Fetch balances for all assets (native + built-in + custom)
     const fetchAllAssets = useCallback(async () => {
         const currentNetwork = networkRef.current
         const currentAddress = walletAddressRef.current
@@ -72,66 +69,64 @@ export const useAssets = (
         setIsLoading(true)
 
         try {
-            // Built-in tokens for current chain
-            const builtIns = getBuiltInTokens(currentNetwork.chainId)
+            // User explicitly imported tokens from storage
+            const allTokens: Token[] = await getStoredActiveTokens()
 
-            // Custom tokens from storage / Redux for current chain
-            const storedCustom = await getStoredCustomTokens(currentNetwork.chainId)
-
-            // Deduplicate: If custom token matches built-in address, keep built-in
-            const builtInAddresses = new Set(builtIns.map((t) => normalizeAddress(t.address)))
-            const uniqueCustom = storedCustom.filter(
-                (t) => !builtInAddresses.has(normalizeAddress(t.address))
-            )
-
-            const allTokens: Token[] = [...builtIns, ...uniqueCustom]
-
-            // 1. Fetch Native Balance
-            const client = getEVMClient(currentNetwork)
-            const nativePromise = client
-                .getBalance({
-                    address: currentAddress as `0x${string}`,
-                })
-                .then((raw) => {
+            // 1. Fetch Native Balances for each network in EVM_NETWORKS
+            const nativePromises = EVM_NETWORKS.map(async (net) => {
+                try {
+                    const client = getEVMClient(net)
+                    const raw = await client.getBalance({
+                        address: currentAddress as `0x${string}`,
+                    })
                     const formatted = formatTokenAmount(
                         raw,
-                        currentNetwork.nativeCurrency.decimals
+                        net.nativeCurrency.decimals
                     )
                     return {
-                        id: `native-${currentNetwork.chainId}`,
-                        chainId: currentNetwork.chainId,
-                        name: currentNetwork.nativeCurrency.name,
-                        symbol: currentNetwork.nativeCurrency.symbol,
-                        decimals: currentNetwork.nativeCurrency.decimals,
+                        id: `native-${net.chainId}`,
+                        chainId: net.chainId,
+                        name: net.nativeCurrency.name,
+                        symbol: net.nativeCurrency.symbol,
+                        decimals: net.nativeCurrency.decimals,
                         balance: formatted,
                         rawBalance: raw,
                         value: '$0.00',
-                        logoUrl: currentNetwork.icon,
+                        logoUrl: net.icon,
+                        networkName: net.name,
+                        networkIcon: net.icon,
                         isNative: true,
+                        isCustom: false,
                         isLoading: false,
                         error: null,
                     } as AssetItem
-                })
-                .catch((err) => {
-                    console.error('Failed to fetch native balance:', err)
+                } catch (err) {
+                    console.error(`Failed to fetch native balance for ${net.name}:`, err)
                     return {
-                        id: `native-${currentNetwork.chainId}`,
-                        chainId: currentNetwork.chainId,
-                        name: currentNetwork.nativeCurrency.name,
-                        symbol: currentNetwork.nativeCurrency.symbol,
-                        decimals: currentNetwork.nativeCurrency.decimals,
+                        id: `native-${net.chainId}`,
+                        chainId: net.chainId,
+                        name: net.nativeCurrency.name,
+                        symbol: net.nativeCurrency.symbol,
+                        decimals: net.nativeCurrency.decimals,
                         balance: '0.00',
                         rawBalance: 0n,
                         value: '$0.00',
-                        logoUrl: currentNetwork.icon,
+                        logoUrl: net.icon,
+                        networkName: net.name,
+                        networkIcon: net.icon,
                         isNative: true,
+                        isCustom: false,
                         isLoading: false,
                         error: 'Failed to fetch balance',
                     } as AssetItem
-                })
+                }
+            })
 
-            // 2. Fetch ERC-20 Balances concurrently and resolve missing logos
+            // 2. Fetch ERC-20 Balances concurrently using each token's chainId
             const tokenPromises = allTokens.map(async (token) => {
+                const tokenNetwork = getNetworkByChainId(token.chainId)
+                const networkName = tokenNetwork ? tokenNetwork.name : `Chain ${token.chainId}`
+
                 let resolvedLogo = token.logoUrl
                 if (!resolvedLogo) {
                     try {
@@ -150,8 +145,9 @@ export const useAssets = (
                 }
 
                 try {
+                    const networkToUse = tokenNetwork || currentNetwork
                     const raw = await getTokenBalance(
-                        currentNetwork,
+                        networkToUse,
                         token.address,
                         currentAddress
                     )
@@ -168,6 +164,8 @@ export const useAssets = (
                         rawBalance: raw,
                         value: '$0.00',
                         logoUrl: resolvedLogo,
+                        networkName,
+                        networkIcon: tokenNetwork?.icon,
                         isNative: false,
                         isCustom: token.isCustom,
                         isLoading: false,
@@ -186,6 +184,8 @@ export const useAssets = (
                         rawBalance: 0n,
                         value: '$0.00',
                         logoUrl: resolvedLogo,
+                        networkName,
+                        networkIcon: tokenNetwork?.icon,
                         isNative: false,
                         isCustom: token.isCustom,
                         isLoading: false,
@@ -194,9 +194,9 @@ export const useAssets = (
                 }
             })
 
-            const [nativeAsset, ...tokenAssets] = await Promise.all([
-                nativePromise,
-                ...tokenPromises,
+            const [nativeAssets, tokenAssets] = await Promise.all([
+                Promise.all(nativePromises),
+                Promise.all(tokenPromises),
             ])
 
             // If the user switched network or address while fetching, discard results
@@ -207,8 +207,9 @@ export const useAssets = (
                 return
             }
 
-            setNativeBalance(nativeAsset.balance)
-            setAssets([nativeAsset, ...tokenAssets])
+            const activeNative = nativeAssets.find((n) => n.chainId === currentNetwork.chainId)
+            setNativeBalance(activeNative ? activeNative.balance : '0.00')
+            setAssets([...nativeAssets, ...tokenAssets])
         } catch (error) {
             console.error('Failed to load assets:', error)
         } finally {
@@ -216,9 +217,11 @@ export const useAssets = (
         }
     }, [dispatch])
 
+    const customTokenIds = customTokens.map((t) => t.id).join(',')
+
     useEffect(() => {
         fetchAllAssets()
-    }, [network.chainId, walletAddress, customTokens.length, fetchAllAssets])
+    }, [network.chainId, walletAddress, customTokenIds, fetchAllAssets])
 
     const deleteCustomToken = useCallback(
         async (tokenId: string) => {

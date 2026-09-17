@@ -17,7 +17,7 @@ const WalletReady = () => {
     }
 
     return (
-        <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black text-white">
+        <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black text-[#FCFAF9]">
 
             <div className="mx-auto flex h-full w-full max-w-md flex-col">
 
@@ -30,8 +30,8 @@ const WalletReady = () => {
                 <div className="flex flex-1 flex-col items-center justify-center px-6">
 
                     {/* Success Icon */}
-                    <div className="mb-7 flex h-24 w-24 items-center justify-center rounded-full border border-[#C7F11D]/30 bg-[#C7F11D]/10">
-                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#C7F11D]">
+                    <div className="mb-7 flex h-24 w-24 items-center justify-center rounded-full border border-[#48E5C2]/30 bg-[#48E5C2]/10">
+                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#48E5C2]">
                             <CheckCircle2
                                 size={38}
                                 className="text-black"
@@ -41,34 +41,34 @@ const WalletReady = () => {
                     </div>
 
                     {/* Title */}
-                    <h1 className="text-center text-2xl font-bold">
+                    <h1 className="text-center text-2xl font-bold text-[#FCFAF9]">
                         Your wallet is ready!
                     </h1>
 
                     {/* Description */}
-                    <p className="mt-3 max-w-sm text-center text-sm leading-6 text-gray-400">
+                    <p className="mt-3 max-w-sm text-center text-sm leading-6 text-[#5E5E5E]">
                         Your wallet has been successfully created and secured.
                         You can now start managing your crypto assets.
                     </p>
 
                     {/* Security Card */}
-                    <div className="mt-8 w-full rounded-2xl border border-white/10 bg-[#111111] p-4">
+                    <div className="mt-8 w-full rounded-2xl border border-[#5E5E5E]/20 bg-black p-4">
 
                         <div className="flex items-start gap-3">
 
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#C7F11D]/10">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#48E5C2]/30 bg-[#48E5C2]/10">
                                 <ShieldCheck
                                     size={21}
-                                    className="text-[#C7F11D]"
+                                    className="text-[#48E5C2]"
                                 />
                             </div>
 
                             <div>
-                                <p className="text-sm font-semibold text-white">
+                                <p className="text-sm font-semibold text-[#FCFAF9]">
                                     Keep your recovery phrase safe
                                 </p>
 
-                                <p className="mt-1 text-xs leading-5 text-gray-400">
+                                <p className="mt-1 text-xs leading-5 text-[#5E5E5E]">
                                     Never share your recovery phrase with anyone.
                                     It is the only way to recover your wallet.
                                 </p>
@@ -81,32 +81,32 @@ const WalletReady = () => {
                     {/* Features */}
                     <div className="mt-6 grid w-full grid-cols-3 gap-3">
 
-                        <div className="rounded-xl border border-white/10 bg-[#0D0D0D] p-3 text-center">
-                            <p className="text-xs font-medium text-gray-300">
+                        <div className="rounded-xl border border-[#5E5E5E]/20 bg-black p-3 text-center">
+                            <p className="text-xs font-medium text-[#FCFAF9]">
                                 Secure
                             </p>
 
-                            <p className="mt-1 text-[10px] text-gray-500">
+                            <p className="mt-1 text-[10px] text-[#5E5E5E]">
                                 Protected wallet
                             </p>
                         </div>
 
-                        <div className="rounded-xl border border-white/10 bg-[#0D0D0D] p-3 text-center">
-                            <p className="text-xs font-medium text-gray-300">
+                        <div className="rounded-xl border border-[#5E5E5E]/20 bg-black p-3 text-center">
+                            <p className="text-xs font-medium text-[#FCFAF9]">
                                 Private
                             </p>
 
-                            <p className="mt-1 text-[10px] text-gray-500">
+                            <p className="mt-1 text-[10px] text-[#5E5E5E]">
                                 You control it
                             </p>
                         </div>
 
-                        <div className="rounded-xl border border-white/10 bg-[#0D0D0D] p-3 text-center">
-                            <p className="text-xs font-medium text-gray-300">
+                        <div className="rounded-xl border border-[#5E5E5E]/20 bg-black p-3 text-center">
+                            <p className="text-xs font-medium text-[#FCFAF9]">
                                 Ready
                             </p>
 
-                            <p className="mt-1 text-[10px] text-gray-500">
+                            <p className="mt-1 text-[10px] text-[#5E5E5E]">
                                 Start using it
                             </p>
                         </div>

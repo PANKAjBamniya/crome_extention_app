@@ -201,7 +201,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
                         : 'transform 400ms cubic-bezier(0.16, 1, 0.3, 1)',
                     ...heightStyle,
                 }}
-                className={`relative w-full max-w-md rounded-t-3xl border-t border-x border-white/10 bg-[#121315] pb-[max(1rem,env(safe-area-inset-bottom,0px))] shadow-2xl z-50 flex flex-col will-change-transform ${className}`}
+                className={`relative w-full max-w-md rounded-t-3xl border-t border-x border-[#5E5E5E]/30 bg-black pb-[max(1rem,env(safe-area-inset-bottom,0px))] shadow-2xl z-50 flex flex-col will-change-transform ${className}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 {showDragHandle && (
@@ -212,7 +212,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        <div className="h-1 w-10 rounded-full bg-white/25 transition-colors hover:bg-white/40" />
+                        <div className="h-1 w-10 rounded-full bg-[#5E5E5E]/40 transition-colors hover:bg-[#5E5E5E]/60" />
                     </div>
                 )}
                 <div className="flex-1 overflow-y-auto px-5 pb-4">

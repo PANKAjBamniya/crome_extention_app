@@ -6,7 +6,7 @@ const ComingSoon = () => {
     const navigate = useNavigate()
 
     return (
-        <div className="relative h-screen w-full overflow-hidden bg-black text-white">
+        <div className="relative h-screen w-full overflow-hidden bg-black text-[#FCFAF9]">
 
             {/* Background Glow */}
             <div
@@ -20,7 +20,7 @@ const ComingSoon = () => {
                     -translate-x-1/2
                     -translate-y-1/2
                     rounded-full
-                    bg-[#C7F11D]
+                    bg-[#48E5C2]
                     opacity-[0.035]
                     blur-[100px]
                 "
@@ -44,19 +44,19 @@ const ComingSoon = () => {
                                 justify-center
                                 rounded-2xl
                                 border
-                                border-[#536500]
-                                bg-[#050900]
-                                text-[#C7F11D]
+                                border-[#48E5C2]/30
+                                bg-[#48E5C2]/10
+                                text-[#48E5C2]
                             "
                         >
                             <Clock3 size={28} strokeWidth={1.5} />
                         </div>
 
-                        <h1 className="text-2xl font-semibold tracking-tight">
+                        <h1 className="text-2xl font-semibold tracking-tight text-[#FCFAF9]">
                             Coming Soon
                         </h1>
 
-                        <p className="mt-3 max-w-xs text-xs leading-5 text-gray-500">
+                        <p className="mt-3 max-w-xs text-xs leading-5 text-[#5E5E5E]">
                             This page is currently under development.
                             Please check back soon.
                         </p>

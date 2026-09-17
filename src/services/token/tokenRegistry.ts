@@ -3,10 +3,10 @@ import { createTokenId, normalizeAddress } from '../../utils/token/normalizeToke
 import { primeLogoCache } from './tokenLogoService'
 
 /**
- * Verified mainnet built-in tokens by chain ID with verified logo URLs.
- * All contract addresses are standard, verified EVM addresses.
+ * Supported token catalog by chain ID with verified metadata and logo URLs.
+ * This is the available token catalog - it does NOT automatically become the user's active list.
  */
-export const BUILT_IN_TOKENS: Record<number, Omit<Token, 'id' | 'isCustom' | 'createdAt'>[]> = {
+export const TOKEN_CATALOG: Record<number, Omit<Token, 'id' | 'isCustom' | 'createdAt'>[]> = {
     // Ethereum Mainnet (1)
     1: [
         {
@@ -139,13 +139,44 @@ export const BUILT_IN_TOKENS: Record<number, Omit<Token, 'id' | 'isCustom' | 'cr
                 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/arbitrum/assets/0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1/logo.png',
         },
     ],
+
+    // Sepolia (11155111)
+    11155111: [
+        {
+            chainId: 11155111,
+            address: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
+            name: 'Chainlink Token',
+            symbol: 'LINK',
+            decimals: 18,
+            logoUrl:
+                'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x514910771AF9Ca656af840dff83E8264EcF986CA/logo.png',
+        },
+    ],
 }
 
 /**
- * Returns built-in tokens for a specific chain, pre-populating logo cache.
+ * Supported token catalog containing all predefined tokens.
+ * This catalog does NOT automatically appear in the user's active token list.
  */
-export const getBuiltInTokens = (chainId: number): Token[] => {
-    const list = BUILT_IN_TOKENS[chainId] || []
+export const SUPPORTED_TOKEN_CATALOG = TOKEN_CATALOG
+
+/**
+ * Backward compatibility alias for TOKEN_CATALOG.
+ */
+export const BUILT_IN_TOKENS = TOKEN_CATALOG
+
+/**
+ * Default active ERC-20 tokens for a fresh wallet installation.
+ * By default, only each network's native token is active.
+ * ERC-20 tokens only become active when explicitly imported or added by the user.
+ */
+export const DEFAULT_ACTIVE_TOKENS: Token[] = []
+
+/**
+ * Returns catalog tokens for a specific chain, pre-populating logo cache.
+ */
+export const getCatalogTokens = (chainId: number): Token[] => {
+    const list = TOKEN_CATALOG[chainId] || []
     return list.map((item) => {
         const address = normalizeAddress(item.address)
         if (item.logoUrl) {
@@ -162,10 +193,37 @@ export const getBuiltInTokens = (chainId: number): Token[] => {
 }
 
 /**
- * Checks if a contract address on a chain is a known built-in token.
+ * Backward compatibility alias for getCatalogTokens.
  */
-export const isBuiltInToken = (chainId: number, address: string): boolean => {
+export const getBuiltInTokens = getCatalogTokens
+
+/**
+ * Checks if a contract address on a chain is in the predefined token catalog.
+ */
+export const isCatalogToken = (chainId: number, address: string): boolean => {
     const cleanAddress = normalizeAddress(address)
-    const builtIns = getBuiltInTokens(chainId)
-    return builtIns.some((t) => normalizeAddress(t.address) === cleanAddress)
+    const catalog = getCatalogTokens(chainId)
+    return catalog.some((t) => normalizeAddress(t.address) === cleanAddress)
 }
+
+/**
+ * Backward compatibility alias for isCatalogToken.
+ */
+export const isBuiltInToken = isCatalogToken
+
+/**
+ * Returns all tokens in the catalog across all supported chains.
+ */
+export const getAllCatalogTokens = (): Token[] => {
+    const chainIds = Object.keys(TOKEN_CATALOG).map(Number)
+    const all: Token[] = []
+    for (const chainId of chainIds) {
+        all.push(...getCatalogTokens(chainId))
+    }
+    return all
+}
+
+/**
+ * Backward compatibility alias for getAllCatalogTokens.
+ */
+export const getAllBuiltInTokens = getAllCatalogTokens

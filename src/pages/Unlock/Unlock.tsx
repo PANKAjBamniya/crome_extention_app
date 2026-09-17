@@ -60,7 +60,7 @@ const Unlock = () => {
     }
 
     return (
-        <div className="relative h-screen w-full overflow-hidden bg-black text-white">
+        <div className="relative h-screen w-full overflow-hidden bg-black text-[#FCFAF9]">
             {/* Background Glow */}
             <div
                 className="
@@ -73,7 +73,7 @@ const Unlock = () => {
                     -translate-x-1/2
                     -translate-y-1/2
                     rounded-full
-                    bg-[#C7F11D]
+                    bg-[#48E5C2]
                     opacity-[0.035]
                     blur-[100px]
                 "
@@ -83,15 +83,15 @@ const Unlock = () => {
                 <main className="flex flex-1 flex-col overflow-hidden px-5">
                     {/* Header Icon & Title */}
                     <div className="mt-8 flex flex-col items-center text-center">
-                        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#536500] bg-[#050900] text-[#C7F11D]">
+                        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#48E5C2]/30 bg-[#48E5C2]/10 text-[#48E5C2]">
                             <Lock size={26} strokeWidth={1.8} />
                         </div>
 
-                        <h1 className="text-2xl font-semibold tracking-tight">
+                        <h1 className="text-2xl font-semibold tracking-tight text-[#FCFAF9]">
                             Welcome Back
                         </h1>
 
-                        <p className="mt-2 max-w-xs text-xs leading-5 text-gray-400">
+                        <p className="mt-2 max-w-xs text-xs leading-5 text-[#5E5E5E]">
                             {customMessage || 'Enter your 6-digit PIN to access your wallet.'}
                         </p>
                     </div>
@@ -110,7 +110,7 @@ const Unlock = () => {
                 </main>
 
                 {/* Bottom Action */}
-                <div className="shrink-0 border-t border-white/5 bg-black/95 px-5 pb-5 pt-3">
+                <div className="shrink-0 border-t border-[#5E5E5E]/20 bg-black/95 px-5 pb-5 pt-3">
                     <Button
                         title={isSubmitting ? 'Unlocking...' : 'Unlock'}
                         variant="primary"

@@ -196,13 +196,13 @@ const SrpInput = ({
                             px-2
                             text-center
                             text-[11px]
-                            text-white
+                            text-[#FCFAF9]
                             outline-none
                             transition-all
                             duration-200
                             ${isInvalid
                                 ? 'border-red-500 bg-red-500/10 focus:border-red-500'
-                                : 'border-[#20251A] bg-[#090C05] focus:border-cryptiva-primary focus:bg-[#0C1006]'
+                                : 'border-[#5E5E5E]/30 bg-black focus:border-[#48E5C2]'
                             }
                         `}
                     />

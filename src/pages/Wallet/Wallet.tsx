@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import {
-    Copy,
     Eye,
     EyeOff,
     Send,
     ArrowDownToLine,
     Repeat2,
-    Wallet as WalletIcon,
-    Settings,
-    Globe,
     DollarSign,
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -18,7 +14,6 @@ import { setWalletAddress, setAccounts } from '../../store/slices/walletSlice'
 import { getWalletAddress, getStoredAccounts } from '../../services/walletVault'
 import HomeHeader from '../../components/Header/HomeHeader'
 import type { AccountItem } from '../../store/slices/walletSlice'
-import { truncateEnd } from '../../utils/helpers'
 import {
     EVM_NETWORKS,
     type EVMNetwork,
@@ -34,8 +29,7 @@ const Wallet = () => {
     const dispatch = useDispatch<AppDispatch>()
 
     const [showBalance, setShowBalance] = useState(true)
-    const [copied, setCopied] = useState(false)
-    const [isNetworkSheetOpen, setIsNetworkSheetOpen] = useState(false);
+    const [isNetworkSheetOpen, setIsNetworkSheetOpen] = useState(false)
     const [activeNetwork, setActiveNetwork] = useState<EVMNetwork>(
         EVM_NETWORKS[0]
     )
@@ -75,19 +69,33 @@ const Wallet = () => {
 
     const walletAddress = reduxAddress ?? storedAddress
     const walletName = reduxWalletName ?? storedWalletName
-    const accounts = reduxAccounts.length > 0 ? reduxAccounts : storedAccounts
-    const displayAddress = walletAddress ? truncateEnd(walletAddress, 10) : '—'
 
     const { assets, isLoading, nativeBalance, deleteCustomToken } = useAssets(
         activeNetwork,
         walletAddress
     )
 
+    // Calculate aggregated USD value from tokens
+    const totalUsdValue = useMemo(() => {
+        let total = 0
+        assets.forEach((a) => {
+            if (a.value) {
+                const numeric = parseFloat(a.value.replace(/[^0-9.-]+/g, ''))
+                if (!isNaN(numeric)) {
+                    total += numeric
+                }
+            }
+        })
+        return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    }, [assets])
+
+    // Maximum 5 assets on Home
+    const displayedAssets = useMemo(() => assets.slice(0, 5), [assets])
 
     return (
-        <div className="relative h-screen w-full overflow-hidden bg-black text-white">
-
+        <div className="relative h-screen w-full overflow-hidden bg-black text-[#FCFAF9]">
             <div className="mx-auto flex h-full w-full max-w-md flex-col">
+                {/* Header */}
                 <HomeHeader
                     address={walletAddress}
                     walletName={walletName}
@@ -96,136 +104,124 @@ const Wallet = () => {
                     onNetworkClick={() => setIsNetworkSheetOpen(true)}
                     onSettingsClick={() => navigate('/settings')}
                 />
-                <main className="flex-1 overflow-y-auto px-5 pb-6">
-                    <div className="mt-3 rounded-2xl border border-[#293C0D] bg-[#050900] p-5">
-                        <div className="flex items-center justify-between">
-                            <p className="text-xs text-gray-500">
-                                Total Balance
-                            </p>
 
+                {/* Main Content Area */}
+                <main className="flex-1 overflow-y-auto px-5 pb-6 space-y-6">
+                    {/* BALANCE SECTION */}
+                    <div className="pt-5 text-center flex flex-col items-center">
+                        <div className="flex items-center justify-center gap-1.5">
+                            <span className="text-[11px] font-medium tracking-wider uppercase text-[#5E5E5E]">
+                                Net Portfolio Value
+                            </span>
                             <button
                                 type="button"
                                 onClick={() => setShowBalance(prev => !prev)}
-                                className="text-gray-500 hover:text-white"
+                                className="text-[#5E5E5E] hover:text-[#FCFAF9] transition-colors p-0.5 cursor-pointer"
+                                aria-label={showBalance ? 'Hide balance' : 'Show balance'}
                             >
                                 {showBalance ? (
-                                    <Eye size={17} />
+                                    <Eye size={14} />
                                 ) : (
-                                    <EyeOff size={17} />
+                                    <EyeOff size={14} />
                                 )}
                             </button>
-
                         </div>
 
-                        <p className="mt-2 text-3xl font-bold tracking-tight">
+                        {/* Large Balance Value */}
+                        <h1 className="mt-2 text-3xl font-bold tracking-tight text-[#FCFAF9]">
                             {showBalance
                                 ? `${nativeBalance} ${activeNetwork.symbol}`
-                                : '••••••'}
-                        </p>
+                                : '••••••••'}
+                        </h1>
 
-                        <div className="mt-2 flex items-center gap-2">
-                            <span className="text-xs text-gray-500">
-                                Portfolio
+                        {/* USD Value & 24h Change */}
+                        <div className="mt-1.5 flex items-center justify-center gap-2">
+                            <span className="text-sm font-medium text-[#5E5E5E]">
+                                {showBalance ? totalUsdValue : '••••'}
                             </span>
-
-                            <span className="text-xs text-[#C7F11D]">
+                            <span className="text-xs font-semibold text-[#48E5C2]">
                                 +0.00%
                             </span>
                         </div>
-
-                        {/* Actions */}
-                        <div className="mt-5 flex justify-between gap-3">
-
-                            <button
-                                type="button"
-                                className="flex flex-col items-center gap-1"
-                            >
-                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#C7F11D]">
-                                    <Send
-                                        size={18}
-                                        className="text-black"
-                                    />
-                                </div>
-
-                                <span className="text-xs font-medium">
-                                    Send
-                                </span>
-                            </button>
-
-                            <button
-                                type="button"
-                                className="flex flex-col items-center gap-1"
-                            >
-                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#C7F11D]">
-                                    <ArrowDownToLine
-                                        size={18}
-                                        className="text-black"
-                                    />
-                                </div>
-
-                                <span className="text-xs font-medium">
-                                    Receive
-                                </span>
-                            </button>
-
-                            <button
-                                type="button"
-                                className="flex flex-col items-center gap-1"
-                            >
-                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#C7F11D]">
-                                    <Repeat2
-                                        size={18}
-                                        className="text-black"
-                                    />
-                                </div>
-
-                                <span className="text-xs font-medium">
-                                    Swap
-                                </span>
-                            </button>
-
-                            <button
-                                type="button"
-                                className="flex flex-col items-center gap-1"
-                            >
-                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#C7F11D]">
-                                    <DollarSign
-                                        size={18}
-                                        className="text-black"
-                                    />
-                                </div>
-
-                                <span className="text-xs font-medium">
-                                    Buy
-                                </span>
-                            </button>
-
-                        </div>
                     </div>
 
-                    {/* Assets */}
-                    <div className="mt-7">
-                        <div className="mb-3 flex items-center justify-between">
-                            <h2 className="text-sm font-semibold">
+                    {/* ACTION SECTION */}
+                    <div className="grid grid-cols-4 gap-2.5">
+                        <button
+                            type="button"
+                            className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[#5E5E5E]/25 bg-black py-3 px-1 transition-all hover:border-[#48E5C2] hover:bg-[#48E5C2]/10 cursor-pointer"
+                        >
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#48E5C2]/10 text-[#48E5C2] transition-colors group-hover:bg-[#48E5C2]/20">
+                                <Send size={18} />
+                            </div>
+                            <span className="text-xs font-medium text-[#FCFAF9]">
+                                Send
+                            </span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => navigate('/receive')}
+                            className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[#5E5E5E]/25 bg-black py-3 px-1 transition-all hover:border-[#48E5C2] hover:bg-[#48E5C2]/10 cursor-pointer"
+                        >
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#48E5C2]/10 text-[#48E5C2] transition-colors group-hover:bg-[#48E5C2]/20">
+                                <ArrowDownToLine size={18} />
+                            </div>
+                            <span className="text-xs font-medium text-[#FCFAF9]">
+                                Receive
+                            </span>
+                        </button>
+
+                        <button
+                            type="button"
+                            className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[#5E5E5E]/25 bg-black py-3 px-1 transition-all hover:border-[#48E5C2] hover:bg-[#48E5C2]/10 cursor-pointer"
+                        >
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#48E5C2]/10 text-[#48E5C2] transition-colors group-hover:bg-[#48E5C2]/20">
+                                <Repeat2 size={18} />
+                            </div>
+                            <span className="text-xs font-medium text-[#FCFAF9]">
+                                Swap
+                            </span>
+                        </button>
+
+                        <button
+                            type="button"
+                            className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[#5E5E5E]/25 bg-black py-3 px-1 transition-all hover:border-[#48E5C2] hover:bg-[#48E5C2]/10 cursor-pointer"
+                        >
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#48E5C2]/10 text-[#48E5C2] transition-colors group-hover:bg-[#48E5C2]/20">
+                                <DollarSign size={18} />
+                            </div>
+                            <span className="text-xs font-medium text-[#FCFAF9]">
+                                Buy
+                            </span>
+                        </button>
+                    </div>
+
+                    {/* ASSETS SECTION */}
+                    <div className="pt-2">
+                        <div className="mb-2.5 flex items-center justify-between">
+                            <h2 className="text-sm font-semibold text-[#FCFAF9]">
                                 Assets
                             </h2>
 
                             <button
                                 type="button"
                                 onClick={() => navigate('/assets')}
-                                className="text-[10px] text-[#C7F11D] hover:underline"
+                                className="text-xs font-medium text-[#48E5C2] hover:underline cursor-pointer"
                             >
-                                View all
+                                View All
                             </button>
                         </div>
 
+                        {/* Clean Asset List with subtle separators, maximum 5 items */}
                         <AssetList
-                            assets={assets}
+                            assets={displayedAssets}
                             isLoading={isLoading}
                             showBalance={showBalance}
                             onDelete={deleteCustomToken}
                         />
 
+                        {/* Minimal Add Token Button */}
                         <div className="mt-3">
                             <AddTokenButton
                                 onClick={() => navigate('/import-token')}
@@ -233,49 +229,9 @@ const Wallet = () => {
                         </div>
                     </div>
                 </main>
-
-                <div className="shrink-0 border-t border-white/5 bg-black px-5 pb-5 pt-3">
-                    <div className="grid grid-cols-3">
-                        <button
-                            type="button"
-                            className="flex flex-col items-center gap-1 text-[#C7F11D]"
-                        >
-                            <WalletIcon size={19} />
-
-                            <span className="text-[9px]">
-                                Wallet
-                            </span>
-                        </button>
-
-                        <button
-                            type="button"
-                            className="flex flex-col items-center gap-1 text-gray-500 hover:text-white"
-                        >
-                            <Globe size={19} />
-
-                            <span className="text-[9px]">
-                                Browser
-                            </span>
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => navigate('/settings')}
-                            className="flex flex-col items-center gap-1 text-gray-500 hover:text-white"
-                        >
-                            <Settings size={19} />
-
-                            <span className="text-[9px]">
-                                Settings
-                            </span>
-                        </button>
-
-                    </div>
-
-                </div>
-
             </div>
 
+            {/* Network Selector Modal */}
             <SelectNetworkSheet
                 isOpen={isNetworkSheetOpen}
                 onClose={() => setIsNetworkSheetOpen(false)}

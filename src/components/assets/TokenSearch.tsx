@@ -16,7 +16,7 @@ export const TokenSearch: React.FC<TokenSearchProps> = ({
 }) => {
     return (
         <div className={`relative flex items-center ${className}`}>
-            <div className="pointer-events-none absolute left-3.5 flex items-center text-gray-500">
+            <div className="pointer-events-none absolute left-3.5 flex items-center text-[#5E5E5E]">
                 <Search size={16} />
             </div>
 
@@ -25,14 +25,14 @@ export const TokenSearch: React.FC<TokenSearchProps> = ({
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full rounded-xl border border-white/10 bg-[#121315] py-2.5 pl-10 pr-9 text-xs text-white placeholder-gray-500 outline-none transition-colors focus:border-[#C7F11D]"
+                className="w-full rounded-xl border border-[#5E5E5E]/30 bg-black py-2.5 pl-10 pr-9 text-xs text-[#FCFAF9] placeholder-[#5E5E5E] outline-none transition-colors focus:border-[#48E5C2]"
             />
 
             {value && (
                 <button
                     type="button"
                     onClick={() => onChange('')}
-                    className="absolute right-3 flex h-5 w-5 items-center justify-center rounded-full text-gray-500 hover:bg-white/10 hover:text-white"
+                    className="absolute right-3 flex h-5 w-5 items-center justify-center rounded-full text-[#5E5E5E] hover:bg-[#5E5E5E]/20 hover:text-[#FCFAF9]"
                     aria-label="Clear search"
                 >
                     <X size={12} />

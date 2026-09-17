@@ -8,7 +8,6 @@ import { validateTokenAddress } from '../../utils/token/validateTokenAddress'
 import { normalizeAddress, createTokenId } from '../../utils/token/normalizeToken'
 import { getTokenMetadata } from '../../services/token/erc20'
 import { hasToken, saveToken } from '../../services/token/tokenStorage'
-import { isBuiltInToken } from '../../services/token/tokenRegistry'
 import { resolveTokenLogo } from '../../services/token/tokenLogoService'
 import { addCustomToken } from '../../store/slices/tokenSlice'
 import { Button } from '../Button'
@@ -84,13 +83,11 @@ export const TokenImportForm: React.FC<TokenImportFormProps> = ({
         try {
             const normalized = normalizeAddress(trimmed)
 
-            // 2. Duplicate prevention
-            const alreadyExists =
-                (await hasToken(activeNetwork.chainId, normalized)) ||
-                isBuiltInToken(activeNetwork.chainId, normalized)
+            // 2. Duplicate prevention (only prevent if already in active user tokens)
+            const alreadyExists = await hasToken(activeNetwork.chainId, normalized)
 
             if (alreadyExists) {
-                setError('Token already added')
+                setError('Token already added to your assets')
                 setIsLoading(false)
                 return
             }
@@ -154,13 +151,13 @@ export const TokenImportForm: React.FC<TokenImportFormProps> = ({
         <div className="flex flex-col gap-5">
             {/* Network Selector */}
             <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-medium text-gray-400">
+                <label className="text-xs font-medium text-[#5E5E5E]">
                     Network
                 </label>
                 <button
                     type="button"
                     onClick={() => setIsNetworkSheetOpen(true)}
-                    className="flex items-center justify-between rounded-xl border border-white/10 bg-[#121315] px-3.5 py-2.5 text-xs text-white hover:border-white/20 transition-colors"
+                    className="flex items-center justify-between rounded-xl border border-[#5E5E5E]/30 bg-black px-3.5 py-2.5 text-xs text-[#FCFAF9] hover:border-[#5E5E5E]/50 transition-colors"
                 >
                     <div className="flex items-center gap-2.5">
                         <ImageComp
@@ -169,7 +166,7 @@ export const TokenImportForm: React.FC<TokenImportFormProps> = ({
                             size={20}
                             className="rounded-full object-cover"
                             fallback={
-                                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#181818] text-[9px] font-bold text-[#C7F11D]">
+                                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black border border-[#5E5E5E]/30 text-[9px] font-bold text-[#48E5C2]">
                                     {activeNetwork.symbol.slice(0, 1)}
                                 </div>
                             }
@@ -178,13 +175,13 @@ export const TokenImportForm: React.FC<TokenImportFormProps> = ({
                             {activeNetwork.name}
                         </span>
                     </div>
-                    <ChevronDown size={15} className="text-gray-400" />
+                    <ChevronDown size={15} className="text-[#5E5E5E]" />
                 </button>
             </div>
 
             {/* Token Contract Address Input */}
             <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-medium text-gray-400">
+                <label className="text-xs font-medium text-[#5E5E5E]">
                     Token Contract Address
                 </label>
                 <div className="relative flex items-center">
@@ -194,13 +191,13 @@ export const TokenImportForm: React.FC<TokenImportFormProps> = ({
                         onChange={handleAddressChange}
                         placeholder="0x..."
                         disabled={isLoading || preview !== null}
-                        className="w-full rounded-xl border border-white/10 bg-[#121315] py-2.5 pl-3.5 pr-20 text-xs font-mono text-white placeholder-gray-600 outline-none focus:border-[#C7F11D] disabled:opacity-60"
+                        className="w-full rounded-xl border border-[#5E5E5E]/30 bg-black py-2.5 pl-3.5 pr-20 text-xs font-mono text-[#FCFAF9] placeholder-[#5E5E5E] outline-none focus:border-[#48E5C2] disabled:opacity-60"
                     />
                     {!preview && (
                         <button
                             type="button"
                             onClick={handlePaste}
-                            className="absolute right-2 flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-[10px] font-medium text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
+                            className="absolute right-2 flex items-center gap-1 rounded-lg border border-[#5E5E5E]/30 bg-black px-2 py-1 text-[10px] font-medium text-[#FCFAF9] hover:border-[#48E5C2] hover:text-[#48E5C2] transition-colors"
                         >
                             <Clipboard size={11} />
                             <span>Paste</span>
@@ -219,8 +216,8 @@ export const TokenImportForm: React.FC<TokenImportFormProps> = ({
 
             {/* Preview Card */}
             {preview && (
-                <div className="rounded-2xl border border-[#536500] bg-[#050900] p-4 flex flex-col gap-3">
-                    <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                <div className="rounded-2xl border border-[#48E5C2]/30 bg-black p-4 flex flex-col gap-3">
+                    <div className="flex items-center justify-between pb-2 border-b border-[#5E5E5E]/20">
                         <div className="flex items-center gap-2.5">
                             {preview.logoUrl ? (
                                 <ImageComp
@@ -229,22 +226,22 @@ export const TokenImportForm: React.FC<TokenImportFormProps> = ({
                                     size={30}
                                     className="rounded-full object-cover shrink-0"
                                     fallback={
-                                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#181818] text-xs font-bold text-[#C7F11D]">
+                                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black border border-[#5E5E5E]/30 text-xs font-bold text-[#48E5C2]">
                                             {preview.symbol.slice(0, 1)}
                                         </div>
                                     }
                                 />
                             ) : (
-                                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#181818] text-xs font-bold text-[#C7F11D]">
+                                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black border border-[#5E5E5E]/30 text-xs font-bold text-[#48E5C2]">
                                     {preview.symbol.slice(0, 1)}
                                 </div>
                             )}
                             <div className="flex items-center gap-1.5">
                                 <CheckCircle2
                                     size={14}
-                                    className="text-[#C7F11D]"
+                                    className="text-[#48E5C2]"
                                 />
-                                <span className="text-xs font-semibold text-white">
+                                <span className="text-xs font-semibold text-[#FCFAF9]">
                                     Token Found
                                 </span>
                             </div>
@@ -255,7 +252,7 @@ export const TokenImportForm: React.FC<TokenImportFormProps> = ({
                                 setPreview(null)
                                 setContractAddress('')
                             }}
-                            className="text-[10px] text-gray-400 hover:text-white underline"
+                            className="text-[10px] text-[#5E5E5E] hover:text-[#FCFAF9] underline"
                         >
                             Change
                         </button>
@@ -263,38 +260,38 @@ export const TokenImportForm: React.FC<TokenImportFormProps> = ({
 
                     <div className="grid grid-cols-2 gap-3 text-xs">
                         <div>
-                            <p className="text-[10px] text-gray-500">
+                            <p className="text-[10px] text-[#5E5E5E]">
                                 Token Name
                             </p>
-                            <p className="font-semibold text-white mt-0.5">
+                            <p className="font-semibold text-[#FCFAF9] mt-0.5">
                                 {preview.name}
                             </p>
                         </div>
                         <div>
-                            <p className="text-[10px] text-gray-500">Symbol</p>
-                            <p className="font-semibold text-[#C7F11D] mt-0.5">
+                            <p className="text-[10px] text-[#5E5E5E]">Symbol</p>
+                            <p className="font-semibold text-[#48E5C2] mt-0.5">
                                 {preview.symbol}
                             </p>
                         </div>
                         <div>
-                            <p className="text-[10px] text-gray-500">
+                            <p className="text-[10px] text-[#5E5E5E]">
                                 Decimals
                             </p>
-                            <p className="font-mono text-white mt-0.5">
+                            <p className="font-mono text-[#FCFAF9] mt-0.5">
                                 {preview.decimals}
                             </p>
                         </div>
                         <div>
-                            <p className="text-[10px] text-gray-500">Network</p>
-                            <p className="font-medium text-white mt-0.5">
+                            <p className="text-[10px] text-[#5E5E5E]">Network</p>
+                            <p className="font-medium text-[#FCFAF9] mt-0.5">
                                 {activeNetwork.name}
                             </p>
                         </div>
                     </div>
 
-                    <div className="pt-2 border-t border-white/5">
-                        <p className="text-[10px] text-gray-500">Contract</p>
-                        <p className="font-mono text-[10px] text-gray-400 break-all mt-0.5">
+                    <div className="pt-2 border-t border-[#5E5E5E]/20">
+                        <p className="text-[10px] text-[#5E5E5E]">Contract</p>
+                        <p className="font-mono text-[10px] text-[#5E5E5E] break-all mt-0.5">
                             {preview.address}
                         </p>
                     </div>
@@ -329,7 +326,7 @@ export const TokenImportForm: React.FC<TokenImportFormProps> = ({
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="py-2.5 text-center text-xs font-medium text-gray-400 hover:text-white transition-colors"
+                        className="py-2.5 text-center text-xs font-medium text-[#5E5E5E] hover:text-[#FCFAF9] transition-colors"
                     >
                         Cancel
                     </button>

@@ -36,11 +36,15 @@ export const Assets = () => {
     const filteredAssets = assets.filter(
         (asset) =>
             asset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            asset.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+            asset.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (asset.networkName &&
+                asset.networkName
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase()))
     )
 
     return (
-        <div className="relative h-screen w-full overflow-hidden bg-black text-white">
+        <div className="relative h-screen w-full overflow-hidden bg-black text-[#FCFAF9]">
             <div
                 className="
                     pointer-events-none
@@ -52,7 +56,7 @@ export const Assets = () => {
                     -translate-x-1/2
                     -translate-y-1/2
                     rounded-full
-                    bg-[#C7F11D]
+                    bg-[#48E5C2]
                     opacity-[0.035]
                     blur-[100px]
                 "
@@ -66,10 +70,10 @@ export const Assets = () => {
 
                     <div className="mt-4 mb-4 flex items-center justify-between">
                         <div>
-                            <h1 className="text-2xl font-semibold tracking-tight">
+                            <h1 className="text-2xl font-semibold tracking-tight text-[#FCFAF9]">
                                 Assets
                             </h1>
-                            <p className="mt-0.5 text-xs text-gray-500">
+                            <p className="mt-0.5 text-xs text-[#5E5E5E]">
                                 {activeNetwork.name}
                             </p>
                         </div>
@@ -77,7 +81,7 @@ export const Assets = () => {
                         <button
                             type="button"
                             onClick={() => navigate('/import-token')}
-                            className="rounded-lg border border-[#C7F11D]/30 bg-[#C7F11D]/10 px-3 py-1.5 text-xs font-semibold text-[#C7F11D] hover:bg-[#C7F11D]/20 transition-colors"
+                            className="rounded-lg border border-[#48E5C2]/30 bg-[#48E5C2]/10 px-3 py-1.5 text-xs font-semibold text-[#48E5C2] hover:bg-[#48E5C2]/20 transition-colors"
                         >
                             + Add Token
                         </button>

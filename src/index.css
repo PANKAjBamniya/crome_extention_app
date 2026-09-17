@@ -1,6 +1,22 @@
 @import "tailwindcss";
 
+/* body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+} */
+
+/* Hide default scrollbar */
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+html,
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/old Edge */
 }

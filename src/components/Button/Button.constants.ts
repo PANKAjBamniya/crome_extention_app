@@ -7,46 +7,46 @@ import {
 
 export const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
     primary: `
-    bg-[#C7F11D]
+    bg-[#48E5C2]
     text-black
     border
-    border-[#C7F11D]
-    hover:bg-[#C7F11D]
-    hover:border-[#C7F11D]
+    border-[#48E5C2]
+    hover:bg-[#48E5C2]/90
+    hover:border-[#48E5C2]
     transition-all
     duration-200
 `,
 
     secondary: `
     bg-transparent
-    text-white
+    text-[#FCFAF9]
     border
-    border-gray-600
-    hover:bg-[#151515]
-    hover:border-gray-400
+    border-[#5E5E5E]
+    hover:border-[#48E5C2]
+    hover:text-[#48E5C2]
     transition-all
     duration-200
 `,
 
     outline: `
         bg-transparent
-        text-white
+        text-[#FCFAF9]
         border
-        border-gray-700
-        hover:bg-[#111111]
+        border-[#5E5E5E]
+        hover:border-[#48E5C2]
     `,
 
     ghost: `
         bg-transparent
-        text-gray-300
+        text-[#5E5E5E]
         border
         border-transparent
-        hover:bg-[#151515]
+        hover:text-[#FCFAF9]
     `,
 
     danger: `
         bg-red-600
-        text-white
+        text-[#FCFAF9]
         border
         border-red-600
         hover:bg-red-700

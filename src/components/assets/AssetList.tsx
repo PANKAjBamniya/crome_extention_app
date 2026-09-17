@@ -21,19 +21,19 @@ export const AssetList: React.FC<AssetListProps> = ({
 }) => {
     if (isLoading && assets.length === 0) {
         return (
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0D0D0D] divide-y divide-white/5">
+            <div className="divide-y divide-[#5E5E5E]/15 py-1">
                 {[1, 2, 3].map((i) => (
-                    <div key={i} className="flex items-center justify-between p-4 animate-pulse">
+                    <div key={i} className="flex items-center justify-between py-3.5 px-2 animate-pulse">
                         <div className="flex items-center gap-3">
-                            <div className="h-9 w-9 rounded-full bg-white/5" />
+                            <div className="h-9 w-9 rounded-full bg-[#5E5E5E]/20" />
                             <div className="space-y-1.5">
-                                <div className="h-3 w-20 rounded bg-white/5" />
-                                <div className="h-2 w-10 rounded bg-white/5" />
+                                <div className="h-3 w-20 rounded bg-[#5E5E5E]/20" />
+                                <div className="h-2 w-10 rounded bg-[#5E5E5E]/15" />
                             </div>
                         </div>
                         <div className="space-y-1.5 text-right">
-                            <div className="h-3 w-16 rounded bg-white/5 ml-auto" />
-                            <div className="h-2 w-10 rounded bg-white/5 ml-auto" />
+                            <div className="h-3 w-16 rounded bg-[#5E5E5E]/20 ml-auto" />
+                            <div className="h-2 w-10 rounded bg-[#5E5E5E]/15 ml-auto" />
                         </div>
                     </div>
                 ))}
@@ -43,15 +43,14 @@ export const AssetList: React.FC<AssetListProps> = ({
 
     if (assets.length === 0) {
         return (
-            <div className="rounded-2xl border border-white/10 bg-[#0D0D0D] p-8 text-center">
-                <p className="text-xs text-gray-500">{emptyMessage}</p>
+            <div className="py-8 text-center border border-[#5E5E5E]/20 rounded-xl bg-black/40">
+                <p className="text-xs text-[#5E5E5E]">{emptyMessage}</p>
             </div>
         )
     }
 
-
     return (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0D0D0D]">
+        <div className="flex flex-col">
             {assets.map((asset, index) => (
                 <AssetRow
                     key={asset.id}
@@ -67,4 +66,3 @@ export const AssetList: React.FC<AssetListProps> = ({
 }
 
 export default AssetList
-

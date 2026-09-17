@@ -32,6 +32,20 @@ export const EVM_NETWORKS: EVMNetwork[] = [
         },
     },
     {
+        id: 'sepolia',
+        name: 'Sepolia',
+        symbol: 'ETH',
+        chainId: 11155111,
+        rpcUrl: 'https://ethereum-sepolia-rpc.publicnode.com',
+        explorerUrl: 'https://sepolia.etherscan.io',
+        icon: ethereumIcon,
+        nativeCurrency: {
+            name: 'Sepolia Ether',
+            symbol: 'ETH',
+            decimals: 18,
+        },
+    },
+    {
         id: 'polygon',
         name: 'Polygon',
         symbol: 'POL',
@@ -74,3 +88,7 @@ export const EVM_NETWORKS: EVMNetwork[] = [
         },
     },
 ]
+
+export const getNetworkByChainId = (chainId: number): EVMNetwork | undefined => {
+    return EVM_NETWORKS.find((n) => n.chainId === chainId)
+}

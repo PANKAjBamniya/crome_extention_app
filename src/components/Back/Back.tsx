@@ -14,10 +14,10 @@ const Back = () => {
                 flex
                 items-center
                 gap-2
-                text-gray-400
+                text-[#5E5E5E]
                 transition-colors
                 duration-200
-                hover:text-white
+                hover:text-[#FCFAF9]
             "
         >
             <ArrowLeft size={18} strokeWidth={1.6} />

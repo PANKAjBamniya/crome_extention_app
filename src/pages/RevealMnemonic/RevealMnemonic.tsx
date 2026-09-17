@@ -57,7 +57,7 @@ const RevealMnemonic = () => {
     }, [mnemonic])
 
     return (
-        <div className="relative h-screen w-full overflow-hidden bg-black text-white">
+        <div className="relative h-screen w-full overflow-hidden bg-black text-[#FCFAF9]">
 
             {/* Background Glow */}
             <div
@@ -71,7 +71,7 @@ const RevealMnemonic = () => {
                     -translate-x-1/2
                     -translate-y-1/2
                     rounded-full
-                    bg-[#C7F11D]
+                    bg-[#48E5C2]
                     opacity-[0.035]
                     blur-[100px]
                 "
@@ -89,11 +89,11 @@ const RevealMnemonic = () => {
 
                     {/* Title */}
                     <div className="mb-5">
-                        <h1 className="text-2xl font-semibold tracking-tight">
+                        <h1 className="text-2xl font-semibold tracking-tight text-[#FCFAF9]">
                             Your Secret Recovery Phrase
                         </h1>
 
-                        <p className="mt-2 text-xs leading-5 text-gray-500">
+                        <p className="mt-2 text-xs leading-5 text-[#5E5E5E]">
                             Write down or copy these {words.length || 12} words
                             in order.
                         </p>
@@ -108,18 +108,18 @@ const RevealMnemonic = () => {
                             gap-3
                             rounded-xl
                             border
-                            border-[#F5A623]/20
-                            bg-[#F5A623]/[0.04]
+                            border-[#5E5E5E]/20
+                            bg-black
                             p-3
                         "
                     >
                         <AlertCircle
                             size={18}
-                            className="mt-0.5 shrink-0 text-[#F5A623]"
+                            className="mt-0.5 shrink-0 text-[#48E5C2]"
                             strokeWidth={1.6}
                         />
 
-                        <p className="text-[10px] leading-4 text-gray-400">
+                        <p className="text-[10px] leading-4 text-[#5E5E5E]">
                             Never share your recovery phrase. Anyone with it
                             can access your wallet.
                         </p>
@@ -144,10 +144,10 @@ const RevealMnemonic = () => {
                                 items-center
                                 justify-center
                                 rounded-lg
-                                text-gray-400
+                                text-[#5E5E5E]
                                 transition-colors
-                                hover:bg-white/5
-                                hover:text-white
+                                hover:bg-[#5E5E5E]/10
+                                hover:text-[#FCFAF9]
                                 disabled:cursor-not-allowed
                                 disabled:opacity-30
                             "
@@ -169,8 +169,8 @@ const RevealMnemonic = () => {
                                 pt-8
                                 rounded-xl
                                 border
-                                border-[#536500]
-                                bg-[#050900]
+                                border-[#5E5E5E]/20
+                                bg-black
                                 p-3
                             "
                         >
@@ -187,12 +187,12 @@ const RevealMnemonic = () => {
                                             justify-center
                                             rounded-lg
                                             border
-                                            border-[#293C0D]
-                                            bg-[#010B04]
+                                            border-[#5E5E5E]/20
+                                            bg-black
                                             px-2
                                         "
                                     >
-                                        <span className="text-[11px] font-medium text-white">
+                                        <span className="text-[11px] font-medium text-[#FCFAF9]">
                                             {showAllSeedPhrase
                                                 ? word
                                                 : '*'.repeat(word.length)}
@@ -216,15 +216,15 @@ const RevealMnemonic = () => {
                                     gap-2
                                     rounded-lg
                                     border
-                                    border-[#536500]
-                                    bg-[#050900]
+                                    border-[#5E5E5E]/30
+                                    bg-black
                                     px-4
                                     text-[11px]
                                     font-medium
-                                    text-gray-300
+                                    text-[#5E5E5E]
                                     transition-all
-                                    hover:border-[#C7F11D]
-                                    hover:text-white
+                                    hover:border-[#48E5C2]
+                                    hover:text-[#FCFAF9]
                                     active:scale-[0.98]
                                     disabled:cursor-not-allowed
                                     disabled:opacity-40
@@ -234,9 +234,9 @@ const RevealMnemonic = () => {
                                     <>
                                         <Check
                                             size={15}
-                                            className="text-[#C7F11D]"
+                                            className="text-[#48E5C2]"
                                         />
-                                        <span className="text-[#C7F11D]">
+                                        <span className="text-[#48E5C2]">
                                             Copied
                                         </span>
                                     </>
@@ -265,7 +265,7 @@ const RevealMnemonic = () => {
                             Keep your recovery phrase private
                         </p>
 
-                        <p className="mt-1 text-[9px] leading-4 text-gray-500">
+                        <p className="mt-1 text-[9px] leading-4 text-[#5E5E5E]">
                             Anyone with these words can access your wallet.
                             Never share them with anyone.
                         </p>
@@ -278,7 +278,7 @@ const RevealMnemonic = () => {
                     className="
                         shrink-0
                         border-t
-                        border-white/5
+                        border-[#5E5E5E]/20
                         bg-black/95
                         px-5
                         pb-5

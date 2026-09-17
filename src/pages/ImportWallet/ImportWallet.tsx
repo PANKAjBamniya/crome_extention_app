@@ -183,7 +183,7 @@ const ImportWallet = () => {
     const hasInput = importType === 'mnemonic' ? hasWords : privateKeyInput.trim().length > 0
 
     return (
-        <div className="relative h-screen w-full overflow-hidden bg-black text-white">
+        <div className="relative h-screen w-full overflow-hidden bg-black text-[#FCFAF9]">
             {/* Background Glow */}
             <div
                 className="
@@ -196,7 +196,7 @@ const ImportWallet = () => {
                     -translate-x-1/2
                     -translate-y-1/2
                     rounded-full
-                    bg-[#C7F11D]
+                    bg-[#48E5C2]
                     opacity-[0.035]
                     blur-[100px]
                 "
@@ -209,15 +209,15 @@ const ImportWallet = () => {
                     </div>
 
                     <div className="mt-5 mb-5">
-                        <h1 className="text-2xl font-semibold tracking-tight">
+                        <h1 className="text-2xl font-semibold tracking-tight text-[#FCFAF9]">
                             Import Wallet
                         </h1>
-                        <p className="mt-2 text-xs leading-5 text-gray-500">
+                        <p className="mt-2 text-xs leading-5 text-[#5E5E5E]">
                             Enter your recovery phrase or private key to restore your wallet.
                         </p>
                     </div>
 
-                    <div className="mb-4 flex rounded-xl border border-white/10 bg-[#121315] p-1">
+                    <div className="mb-4 flex rounded-xl border border-[#5E5E5E]/20 bg-black p-1">
                         <button
                             type="button"
                             onClick={() => {
@@ -225,8 +225,8 @@ const ImportWallet = () => {
                                 setError('')
                             }}
                             className={`flex-1 rounded-lg py-3 text-xs font-medium transition-all ${importType === 'mnemonic'
-                                ? 'bg-[#C7F11D] text-black font-semibold'
-                                : 'text-gray-400 hover:text-white'
+                                ? 'bg-[#48E5C2] text-black font-semibold'
+                                : 'text-[#5E5E5E] hover:text-[#FCFAF9]'
                                 }`}
                         >
                             Recovery Phrase
@@ -238,8 +238,8 @@ const ImportWallet = () => {
                                 setError('')
                             }}
                             className={`flex-1 rounded-lg py-1.5 text-xs font-medium transition-all ${importType === 'privateKey'
-                                ? 'bg-[#C7F11D] text-black font-semibold'
-                                : 'text-gray-400 hover:text-white'
+                                ? 'bg-[#48E5C2] text-black font-semibold'
+                                : 'text-[#5E5E5E] hover:text-[#FCFAF9]'
                                 }`}
                         >
                             Private Key
@@ -249,21 +249,21 @@ const ImportWallet = () => {
                     {importType === 'mnemonic' ? (
                         <>
                             <div className="mb-2 flex items-center justify-between">
-                                <label className="text-xs font-medium text-white">
+                                <label className="text-xs font-medium text-[#FCFAF9]">
                                     Seed Phrase
                                 </label>
                                 <button
                                     type="button"
                                     onClick={() => setShowWords((prev) => !prev)}
-                                    className="flex h-7 w-7 items-center justify-center rounded-md text-gray-500 transition-colors hover:bg-white/5 hover:text-white"
+                                    className="flex h-7 w-7 items-center justify-center rounded-md text-[#5E5E5E] transition-colors hover:bg-[#5E5E5E]/10 hover:text-[#FCFAF9]"
                                     aria-label={showWords ? 'Hide seed phrase' : 'Show seed phrase'}
                                 >
                                     {showWords ? <EyeOff size={15} /> : <Eye size={15} />}
                                 </button>
                             </div>
 
-                            <div className="rounded-xl border border-[#536500] bg-[#050900] p-3">
-                                <p className="mb-3 text-[10px] text-gray-500">
+                            <div className="rounded-xl border border-[#5E5E5E]/20 bg-black p-3">
+                                <p className="mb-3 text-[10px] text-[#5E5E5E]">
                                     Enter your 12-word recovery phrase
                                 </p>
                                 <SrpInput
@@ -278,21 +278,21 @@ const ImportWallet = () => {
                     ) : (
                         <>
                             <div className="mb-2 flex items-center justify-between">
-                                <label className="text-xs font-medium text-white">
+                                <label className="text-xs font-medium text-[#FCFAF9]">
                                     Private Key
                                 </label>
                                 <button
                                     type="button"
                                     onClick={() => setShowPrivateKey((prev) => !prev)}
-                                    className="flex h-7 w-7 items-center justify-center rounded-md text-gray-500 transition-colors hover:bg-white/5 hover:text-white"
+                                    className="flex h-7 w-7 items-center justify-center rounded-md text-[#5E5E5E] transition-colors hover:bg-[#5E5E5E]/10 hover:text-[#FCFAF9]"
                                     aria-label={showPrivateKey ? 'Hide private key' : 'Show private key'}
                                 >
                                     {showPrivateKey ? <EyeOff size={15} /> : <Eye size={15} />}
                                 </button>
                             </div>
 
-                            <div className="rounded-xl border border-[#536500] bg-[#050900] p-3">
-                                <p className="mb-2 text-[10px] text-gray-500">
+                            <div className="rounded-xl border border-[#5E5E5E]/20 bg-black p-3">
+                                <p className="mb-2 text-[10px] text-[#5E5E5E]">
                                     Paste your 64-character hexadecimal private key
                                 </p>
                                 <textarea
@@ -303,7 +303,7 @@ const ImportWallet = () => {
                                         if (error) setError('')
                                     }}
                                     placeholder="e.g. 0x4f3edf983ac636a65a842ce7c78d5aa706d4e132..."
-                                    className="w-full resize-none rounded-lg border border-white/10 bg-[#121315] p-2.5 font-mono text-xs text-white placeholder-gray-600 outline-none focus:border-[#C7F11D]"
+                                    className="w-full resize-none rounded-lg border border-[#5E5E5E]/30 bg-black p-2.5 font-mono text-xs text-[#FCFAF9] placeholder-[#5E5E5E] outline-none focus:border-[#48E5C2]"
                                     style={
                                         {
                                             WebkitTextSecurity: showPrivateKey ? 'none' : 'disc',
@@ -322,7 +322,7 @@ const ImportWallet = () => {
                             <button
                                 type="button"
                                 onClick={handleClear}
-                                className="flex h-10 items-center justify-center gap-2 rounded-lg border border-[#536500] bg-[#050900] text-[11px] font-medium text-white transition-all duration-200 hover:border-red-400 hover:bg-red-400/5 active:scale-[0.98]"
+                                className="flex h-10 items-center justify-center gap-2 rounded-lg border border-[#5E5E5E]/30 bg-black text-[11px] font-medium text-[#FCFAF9] transition-all duration-200 hover:border-red-400 hover:text-red-400 active:scale-[0.98]"
                             >
                                 <X size={15} />
                                 Clear
@@ -331,7 +331,7 @@ const ImportWallet = () => {
                             <button
                                 type="button"
                                 onClick={handlePaste}
-                                className="flex h-10 items-center justify-center gap-2 rounded-lg border border-[#536500] bg-[#050900] text-[11px] font-medium text-white transition-all duration-200 hover:border-[#C7F11D] hover:bg-[#C7F11D0A] active:scale-[0.98]"
+                                className="flex h-10 items-center justify-center gap-2 rounded-lg border border-[#5E5E5E]/30 bg-black text-[11px] font-medium text-[#FCFAF9] transition-all duration-200 hover:border-[#48E5C2] hover:text-[#48E5C2] active:scale-[0.98]"
                             >
                                 <Clipboard size={14} strokeWidth={1.5} />
                                 Paste
@@ -341,7 +341,7 @@ const ImportWallet = () => {
                 </main>
 
                 {/* Bottom Action */}
-                <div className="shrink-0 border-t border-white/5 bg-black/95 px-5 pb-5 pt-3">
+                <div className="shrink-0 border-t border-[#5E5E5E]/20 bg-black/95 px-5 pb-5 pt-3">
                     <Button
                         title="Continue"
                         variant="primary"

@@ -12,7 +12,9 @@ import {
     MoreVertical,
     Wallet,
     Pencil,
+    Shield,
 } from 'lucide-react'
+import { AccountDetails } from '../../components/AccountDetails'
 import type { RootState, AppDispatch } from '../../store'
 import {
     setWalletAddress,
@@ -56,6 +58,7 @@ export const Accounts: React.FC = () => {
     const [menuOpenAddress, setMenuOpenAddress] = useState<string | null>(null)
     const [editingAccount, setEditingAccount] = useState<AccountItem | null>(null)
     const [editNameInput, setEditNameInput] = useState('')
+    const [detailsAccount, setDetailsAccount] = useState<AccountItem | null>(null)
 
     useEffect(() => {
         Promise.all([getWalletAddress(), getStoredAccounts()]).then(
@@ -193,7 +196,7 @@ export const Accounts: React.FC = () => {
                     -translate-x-1/2
                     -translate-y-1/2
                     rounded-full
-                    bg-[#C7F11D]
+                    bg-[#48E5C2]
                     opacity-[0.035]
                     blur-[100px]
                 "
@@ -201,7 +204,7 @@ export const Accounts: React.FC = () => {
 
             <div className="relative mx-auto flex h-full w-full max-w-md flex-col">
                 {/* Header */}
-                <div className="shrink-0 flex items-center justify-between border-b border-white/10 px-5 pt-4 pb-3">
+                <div className="shrink-0 flex items-center justify-between border-b border-[#5E5E5E]/20 px-5 pt-4 pb-3">
                     <div className="flex items-center gap-2">
                         <button
                             type="button"
@@ -217,7 +220,7 @@ export const Accounts: React.FC = () => {
                         >
                             <ArrowLeft size={18} />
                         </button>
-                        <h1 className="text-base font-semibold text-white">
+                        <h1 className="text-base font-semibold text-[#FCFAF9]">
                             {showAddOptions ? 'Add Wallet' : 'Accounts'}
                         </h1>
                     </div>
@@ -226,7 +229,7 @@ export const Accounts: React.FC = () => {
                         type="button"
                         onClick={() => navigate('/wallet', { replace: true })}
                         aria-label="Close"
-                        className="rounded-lg p-1.5 text-gray-400 hover:bg-white/5 hover:text-white transition-colors"
+                        className="rounded-lg p-1.5 text-[#5E5E5E] hover:bg-[#5E5E5E]/10 hover:text-[#FCFAF9] transition-colors"
                     >
                         <X size={18} />
                     </button>
@@ -237,23 +240,23 @@ export const Accounts: React.FC = () => {
                     {!showAddOptions ? (
                         <>
                             {/* Search Bar */}
-                            <div className="my-3 relative flex items-center w-full rounded-full bg-[#18191B] border border-white/5 px-3.5 py-2 text-sm focus-within:border-white/20 transition-all">
+                            <div className="my-3 relative flex items-center w-full rounded-full bg-black border border-[#5E5E5E]/30 px-3.5 py-2 text-sm focus-within:border-[#48E5C2] transition-all">
                                 <Search
                                     size={16}
-                                    className="text-gray-400 shrink-0 mr-2.5"
+                                    className="text-[#5E5E5E] shrink-0 mr-2.5"
                                 />
                                 <input
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Search your accounts"
-                                    className="w-full bg-transparent text-sm text-white placeholder-gray-500 outline-none"
+                                    className="w-full bg-transparent text-sm text-[#FCFAF9] placeholder-[#5E5E5E] outline-none"
                                 />
                                 {searchQuery && (
                                     <button
                                         type="button"
                                         onClick={() => setSearchQuery('')}
-                                        className="text-gray-400 hover:text-white p-0.5 cursor-pointer"
+                                        className="text-[#5E5E5E] hover:text-[#FCFAF9] p-0.5 cursor-pointer"
                                     >
                                         <X size={14} />
                                     </button>
@@ -276,23 +279,23 @@ export const Accounts: React.FC = () => {
                                                     handleSelectAccount(account)
                                                 }
                                                 className={`group flex w-full items-center justify-between rounded-xl border p-3 text-left transition-all cursor-pointer ${isSelected
-                                                        ? 'border-[#C7F11D]/30 bg-[#18191B]'
-                                                        : 'border-white/5 bg-[#18191B] hover:border-white/20 hover:bg-white/[0.04]'
+                                                    ? 'border-[#48E5C2]/40 bg-[#48E5C2]/10'
+                                                    : 'border-[#5E5E5E]/25 bg-black hover:border-[#5E5E5E]/50'
                                                     }`}
                                             >
                                                 <div className="flex items-center gap-3 min-w-0">
-                                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-purple-800 to-indigo-900 border border-purple-500/20 text-purple-200 shadow-sm">
+                                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#48E5C2]/30 bg-[#48E5C2]/10 text-[#48E5C2]">
                                                         <Wallet size={20} />
                                                     </div>
 
                                                     <div className="min-w-0 flex flex-col items-start gap-1">
                                                         <div className="flex items-center gap-2 max-w-full">
-                                                            <p className="truncate text-sm font-semibold text-white">
+                                                            <p className="truncate text-sm font-semibold text-[#FCFAF9]">
                                                                 {account.walletName ||
                                                                     'Account 1'}
                                                             </p>
                                                             {isSelected && (
-                                                                <span className="shrink-0 rounded-full bg-[#C7F11D]/15 px-2 py-0.5 text-[10px] font-semibold text-[#C7F11D]">
+                                                                <span className="shrink-0 rounded-full bg-[#48E5C2]/15 px-2 py-0.5 text-[10px] font-semibold text-[#48E5C2]">
                                                                     Active
                                                                 </span>
                                                             )}
@@ -307,7 +310,7 @@ export const Accounts: React.FC = () => {
                                                                 )
                                                             }
                                                             title="Copy address"
-                                                            className="inline-flex items-center gap-1.5 rounded-full bg-[#242528] border border-white/5 px-2.5 py-0.5 text-[11px] font-mono text-gray-300 hover:border-white/20 hover:text-white transition-colors cursor-pointer"
+                                                            className="inline-flex items-center gap-1.5 rounded-full bg-black border border-[#5E5E5E]/30 px-2.5 py-0.5 text-[11px] font-mono text-[#5E5E5E] hover:border-[#48E5C2] hover:text-[#FCFAF9] transition-colors cursor-pointer"
                                                         >
                                                             <span>
                                                                 {formatAddress(
@@ -318,12 +321,12 @@ export const Accounts: React.FC = () => {
                                                                 account.address ? (
                                                                 <Check
                                                                     size={11}
-                                                                    className="text-[#C7F11D]"
+                                                                    className="text-[#48E5C2]"
                                                                 />
                                                             ) : (
                                                                 <Copy
                                                                     size={11}
-                                                                    className="text-gray-400 group-hover:text-gray-300"
+                                                                    className="text-[#5E5E5E] group-hover:text-[#FCFAF9]"
                                                                 />
                                                             )}
                                                         </button>
@@ -343,7 +346,7 @@ export const Accounts: React.FC = () => {
                                                             )
                                                         }}
                                                         aria-label="Account options"
-                                                        className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+                                                        className="flex h-8 w-8 items-center justify-center rounded-lg text-[#5E5E5E] hover:bg-[#5E5E5E]/10 hover:text-[#FCFAF9] transition-colors cursor-pointer"
                                                     >
                                                         <MoreVertical size={16} />
                                                     </button>
@@ -351,7 +354,7 @@ export const Accounts: React.FC = () => {
                                                     {menuOpenAddress ===
                                                         account.address && (
                                                             <div
-                                                                className="absolute right-0 top-9 z-50 min-w-[140px] rounded-xl border border-white/10 bg-[#1F2023] p-1 shadow-xl backdrop-blur-md"
+                                                                className="absolute right-0 top-9 z-50 min-w-[140px] rounded-xl border border-[#5E5E5E]/30 bg-black p-1 shadow-xl backdrop-blur-md"
                                                                 onClick={(e) =>
                                                                     e.stopPropagation()
                                                                 }
@@ -370,10 +373,21 @@ export const Accounts: React.FC = () => {
                                                                             null
                                                                         )
                                                                     }}
-                                                                    className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-xs text-gray-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+                                                                    className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-xs text-[#5E5E5E] hover:bg-[#5E5E5E]/10 hover:text-[#FCFAF9] transition-colors cursor-pointer"
                                                                 >
                                                                     <Pencil size={13} />
-                                                                    <span>Edit</span>
+                                                                    <span>Rename</span>
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        setDetailsAccount(account)
+                                                                        setMenuOpenAddress(null)
+                                                                    }}
+                                                                    className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-xs text-[#5E5E5E] hover:bg-[#5E5E5E]/10 hover:text-[#FCFAF9] transition-colors cursor-pointer"
+                                                                >
+                                                                    <Shield size={13} />
+                                                                    <span>Account Details</span>
                                                                 </button>
                                                             </div>
                                                         )}
@@ -382,7 +396,7 @@ export const Accounts: React.FC = () => {
                                         )
                                     })
                                 ) : (
-                                    <div className="py-6 text-center text-xs text-gray-500">
+                                    <div className="py-6 text-center text-xs text-[#5E5E5E]">
                                         No accounts found matching "{searchQuery}"
                                     </div>
                                 )}
@@ -391,12 +405,12 @@ export const Accounts: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={() => setShowAddOptions(true)}
-                                    className="flex items-center gap-3 w-full p-2 mt-1 rounded-xl text-left transition-colors hover:bg-white/[0.04] cursor-pointer group"
+                                    className="flex items-center gap-3 w-full p-2 mt-1 rounded-xl text-left transition-colors hover:bg-[#5E5E5E]/5 cursor-pointer group"
                                 >
-                                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#162038] border border-[#263760] text-[#5B8BF5] group-hover:bg-[#1C2947] transition-colors">
+                                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#48E5C2]/10 border border-[#48E5C2]/30 text-[#48E5C2] group-hover:bg-[#48E5C2]/20 transition-colors">
                                         <Plus size={16} />
                                     </div>
-                                    <span className="text-sm font-semibold text-[#5B8BF5] group-hover:text-[#759EFA] transition-colors">
+                                    <span className="text-sm font-semibold text-[#48E5C2] transition-colors">
                                         Add account
                                     </span>
                                 </button>
@@ -408,53 +422,52 @@ export const Accounts: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => navigate('/create-wallet')}
-                                className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-[#18191B] p-3 text-left transition-all hover:border-[#C7F11D]/40 hover:bg-white/[0.04]"
+                                className="flex w-full items-center justify-between rounded-xl border border-[#5E5E5E]/30 bg-black p-3 text-left transition-all hover:border-[#48E5C2] hover:bg-[#48E5C2]/5 cursor-pointer"
                             >
                                 <div>
-                                    <p className="text-sm font-semibold text-white">
+                                    <p className="text-sm font-semibold text-[#FCFAF9]">
                                         Create New Wallet
                                     </p>
-                                    <p className="mt-0.5 text-xs text-gray-400">
+                                    <p className="mt-0.5 text-xs text-[#5E5E5E]">
                                         Generate a new 12-word recovery phrase
                                     </p>
                                 </div>
-                                <ChevronRight size={16} className="text-gray-400" />
+                                <ChevronRight size={16} className="text-[#5E5E5E]" />
                             </button>
 
                             <button
                                 type="button"
                                 onClick={() => navigate('/import-wallet')}
-                                className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-[#18191B] p-3 text-left transition-all hover:border-[#C7F11D]/40 hover:bg-white/[0.04]"
+                                className="flex w-full items-center justify-between rounded-xl border border-[#5E5E5E]/30 bg-black p-3 text-left transition-all hover:border-[#48E5C2] hover:bg-[#48E5C2]/5 cursor-pointer"
                             >
                                 <div>
-                                    <p className="text-sm font-semibold text-white">
+                                    <p className="text-sm font-semibold text-[#FCFAF9]">
                                         Import Existing Wallet
                                     </p>
-                                    <p className="mt-0.5 text-xs text-gray-400">
+                                    <p className="mt-0.5 text-xs text-[#5E5E5E]">
                                         Restore with recovery phrase or private key
                                     </p>
                                 </div>
-                                <ChevronRight size={16} className="text-gray-400" />
+                                <ChevronRight size={16} className="text-[#5E5E5E]" />
                             </button>
                         </div>
                     )}
                 </main>
             </div>
 
-            {/* Edit Account Modal */}
             {editingAccount && (
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-5 backdrop-blur-sm"
                     onClick={() => setEditingAccount(null)}
                 >
                     <div
-                        className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#18191B] p-5 shadow-2xl"
+                        className="w-full max-w-sm rounded-2xl border border-[#5E5E5E]/30 bg-black p-5 shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <h2 className="text-base font-semibold text-white">
+                        <h2 className="text-base font-semibold text-[#FCFAF9]">
                             Edit Account Name
                         </h2>
-                        <p className="mt-1 text-xs text-gray-400">
+                        <p className="mt-1 text-xs text-[#5E5E5E]">
                             Enter a new display name for this account.
                         </p>
 
@@ -464,14 +477,14 @@ export const Accounts: React.FC = () => {
                             onChange={(e) => setEditNameInput(e.target.value)}
                             placeholder="Account name"
                             autoFocus
-                            className="mt-4 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-2.5 text-sm text-white placeholder-gray-500 outline-none focus:border-[#C7F11D]"
+                            className="mt-4 w-full rounded-xl border border-[#5E5E5E]/30 bg-black px-3.5 py-2.5 text-sm text-[#FCFAF9] placeholder-[#5E5E5E] outline-none focus:border-[#48E5C2]"
                         />
 
                         <div className="mt-5 flex items-center justify-end gap-2">
                             <button
                                 type="button"
                                 onClick={() => setEditingAccount(null)}
-                                className="rounded-xl px-4 py-2 text-xs font-medium text-gray-400 hover:text-white transition-colors"
+                                className="rounded-xl px-4 py-2 text-xs font-medium text-[#5E5E5E] hover:text-[#FCFAF9] transition-colors"
                             >
                                 Cancel
                             </button>
@@ -479,13 +492,45 @@ export const Accounts: React.FC = () => {
                                 type="button"
                                 onClick={handleSaveEditName}
                                 disabled={!editNameInput.trim()}
-                                className="rounded-xl bg-[#C7F11D] px-4 py-2 text-xs font-semibold text-black hover:opacity-90 transition-opacity disabled:opacity-50"
+                                className="rounded-xl bg-[#48E5C2] px-4 py-2 text-xs font-semibold text-black hover:opacity-90 transition-opacity disabled:opacity-50"
                             >
                                 Save
                             </button>
                         </div>
                     </div>
                 </div>
+            )}
+
+            {detailsAccount && (
+                <AccountDetails
+                    account={detailsAccount}
+                    onClose={() => setDetailsAccount(null)}
+                    onAccountUpdated={(updated) => {
+                        setStoredAccounts((prev) =>
+                            prev.map((acc) =>
+                                acc.address.toLowerCase() === updated.address.toLowerCase()
+                                    ? updated
+                                    : acc
+                            )
+                        )
+                        if (
+                            activeAddress &&
+                            activeAddress.toLowerCase() === updated.address.toLowerCase()
+                        ) {
+                            setStoredWalletName(updated.walletName)
+                        }
+                    }}
+                    onAccountDeleted={(deletedAddress) => {
+                        setStoredAccounts((prev) =>
+                            prev.filter(
+                                (acc) =>
+                                    acc.address.toLowerCase() !==
+                                    deletedAddress.toLowerCase()
+                            )
+                        )
+                        setDetailsAccount(null)
+                    }}
+                />
             )}
         </div>
     )

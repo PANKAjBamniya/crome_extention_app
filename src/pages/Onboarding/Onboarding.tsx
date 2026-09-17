@@ -28,8 +28,8 @@ const Onboarding = () => {
             className="
                 min-h-screen
                 w-full
-                bg-[#0a0a0a]
-                text-white
+                bg-black
+                text-[#FCFAF9]
                 overflow-y-auto
             "
         >
@@ -83,7 +83,7 @@ const Onboarding = () => {
                             width="full"
                             align="center"
                             icon={
-                                <span className="text-gray-400">
+                                <span className="text-[#5E5E5E]">
                                     <ArrowRight />
                                 </span>
                             }
@@ -91,13 +91,13 @@ const Onboarding = () => {
                         />
 
                         <div className="text-center pt-3">
-                            <p className="text-xs text-gray-500 leading-5">
+                            <p className="text-xs text-[#5E5E5E] leading-5">
                                 By continuing, you agree to our{' '}
 
                                 <button
                                     type="button"
                                     onClick={termsOfService}
-                                    className="text-white underline"
+                                    className="text-[#FCFAF9] underline hover:text-[#48E5C2]"
                                 >
                                     Terms of Use
                                 </button>
@@ -107,7 +107,7 @@ const Onboarding = () => {
                                 <button
                                     type="button"
                                     onClick={privacyPolicy}
-                                    className="text-white underline"
+                                    className="text-[#FCFAF9] underline hover:text-[#48E5C2]"
                                 >
                                     Privacy Policy
                                 </button>

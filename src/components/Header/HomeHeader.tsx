@@ -54,16 +54,16 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
     }, [navigate, onSettingsClick])
 
     return (
-        <header className="relative flex shrink-0 items-center justify-between px-4 pb-3 pt-4 border-b border-white/5 bg-black/60 backdrop-blur-sm">
+        <header className="relative flex shrink-0 items-center justify-between px-4 pb-3 pt-4 border-b border-[#5E5E5E]/20 bg-black">
             <div
                 onClick={onAccountClick}
-                className="flex items-start gap-1 min-w-0 flex-col cursor-pointer group rounded-lg p-1 -m-1 transition-colors hover:bg-white/5"
+                className="flex items-start gap-1 min-w-0 flex-col cursor-pointer group rounded-lg p-1 -m-1 transition-colors hover:bg-[#5E5E5E]/10"
                 role="button"
                 tabIndex={0}
                 title="Manage accounts"
             >
                 <div className="min-w-0 flex flex-col items-start">
-                    <h1 className="text-sm font-semibold text-white truncate leading-tight flex gap-1.5 items-center">
+                    <h1 className="text-sm font-semibold text-[#FCFAF9] truncate leading-tight flex gap-1.5 items-center">
                         <span>
                             👋 Hello,{' '}
                             {walletName
@@ -75,14 +75,14 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
 
                         <ChevronDown
                             size={14}
-                            className="text-gray-400 group-hover:text-[#C7F11D] transition-colors"
+                            className="text-[#5E5E5E] group-hover:text-[#48E5C2] transition-colors"
                         />
                     </h1>
 
                     <div className="mt-1 flex items-center gap-1.5">
                         <span
                             onClick={handleCopy}
-                            className="font-mono text-[11px] text-gray-400 hover:text-white cursor-pointer transition-colors"
+                            className="font-mono text-[11px] text-[#5E5E5E] hover:text-[#FCFAF9] cursor-pointer transition-colors"
                             title="Click to copy full address"
                         >
                             {displayAddress}
@@ -92,18 +92,18 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
                             type="button"
                             onClick={handleCopy}
                             aria-label="Copy full wallet address"
-                            className="flex items-center justify-center p-0.5 rounded text-gray-500 hover:text-[#C7F11D] transition-colors"
+                            className="flex items-center justify-center p-0.5 rounded text-[#5E5E5E] hover:text-[#48E5C2] transition-colors"
                             title={copied ? 'Copied!' : 'Copy full address'}
                         >
                             {copied ? (
-                                <Check size={12} className="text-[#C7F11D]" />
+                                <Check size={12} className="text-[#48E5C2]" />
                             ) : (
                                 <Copy size={12} />
                             )}
                         </button>
 
                         {copied && (
-                            <span className="text-[10px] font-medium text-[#C7F11D] animate-fade-in">
+                            <span className="text-[10px] font-medium text-[#48E5C2] animate-fade-in">
                                 Copied
                             </span>
                         )}
@@ -116,37 +116,36 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
                 <button
                     type="button"
                     onClick={onNetworkClick}
-                    className="flex items-center gap-1.5 rounded-full border border-white/10 bg-[#18191B] px-2.5 py-1 text-xs text-gray-300 hover:border-white/20 hover:text-white transition-colors cursor-pointer active:scale-95"
+                    className="flex items-center gap-1.5 rounded-full border border-[#5E5E5E]/30 bg-black px-2.5 py-1 text-xs text-[#FCFAF9] hover:border-[#48E5C2] transition-colors cursor-pointer active:scale-95"
                 >
                     {activeNetwork.icon ? (
                         <ImageComp
                             src={activeNetwork.icon}
                             alt={activeNetwork.name}
                             className="h-4 w-4 rounded-full object-cover shrink-0"
-                            fallback={<span className="flex h-2 w-2 rounded-full bg-[#C7F11D]" />}
+                            fallback={<span className="flex h-2 w-2 rounded-full bg-[#48E5C2]" />}
                         />
                     ) : (
-                        <span className="flex h-2 w-2 rounded-full bg-[#C7F11D]" />
+                        <span className="flex h-2 w-2 rounded-full bg-[#48E5C2]" />
                     )}
-                    <span className="font-medium text-[11px] max-w-[70px] truncate">
+                    <span className="font-medium text-[11px] max-w-[70px] truncate text-[#FCFAF9]">
                         {activeNetwork.symbol}
                     </span>
-                    <ChevronDown size={13} className="text-gray-400" />
+                    <ChevronDown size={13} className="text-[#5E5E5E]" />
                 </button>
 
                 {/* Settings icon */}
-                <button
+                {/* <button
                     type="button"
                     onClick={handleSettings}
                     aria-label="Settings"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-white/10 hover:text-white transition-colors"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[#5E5E5E] hover:text-[#FCFAF9] hover:bg-[#5E5E5E]/10 transition-colors"
                 >
                     <Settings size={18} />
-                </button>
+                </button> */}
             </div>
         </header>
     )
 }
 
 export default HomeHeader
-

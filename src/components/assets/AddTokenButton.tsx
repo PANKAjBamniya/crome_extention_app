@@ -14,13 +14,12 @@ export const AddTokenButton: React.FC<AddTokenButtonProps> = ({
         <button
             type="button"
             onClick={onClick}
-            className={`flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/15 bg-white/[0.02] py-3 text-xs font-medium text-gray-300 transition-all hover:border-[#C7F11D]/50 hover:bg-[#C7F11D]/5 hover:text-[#C7F11D] active:scale-[0.99] ${className}`}
+            className={`flex w-full items-center justify-center gap-2 rounded-xl border border-[#48E5C2]/30 bg-[#48E5C2]/10 py-2.5 text-xs font-semibold text-[#48E5C2] transition-all hover:bg-[#48E5C2]/20 hover:border-[#48E5C2] active:scale-[0.99] cursor-pointer ${className}`}
         >
-            <Plus size={15} />
+            <Plus size={15} strokeWidth={2.2} />
             <span>Add Token</span>
         </button>
     )
 }
 
 export default AddTokenButton
-

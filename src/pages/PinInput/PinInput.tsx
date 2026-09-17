@@ -49,7 +49,7 @@ const PinInput = ({
             className="flex w-full flex-col items-center outline-none"
         >
             {/* PIN */}
-            <div className="rounded-xl border border-[#293C0D] bg-[#041A09] p-3">
+            <div className="rounded-xl border border-[#5E5E5E]/20 bg-black p-3">
                 <div className="flex gap-2">
                     {Array.from({ length: 6 }).map((_, index) => (
                         <div
@@ -63,13 +63,13 @@ const PinInput = ({
                                 rounded-lg
                                 border
                                 ${password.length > index
-                                    ? 'border-[#C7F11D] bg-[#C7F11D0A]'
-                                    : 'border-[#293C0D] bg-[#010B04]'
+                                    ? 'border-[#48E5C2] bg-[#48E5C2]/10'
+                                    : 'border-[#5E5E5E]/30 bg-black'
                                 }
                             `}
                         >
                             {password.length > index && (
-                                <span className="text-sm font-medium text-white">
+                                <span className="text-sm font-medium text-[#FCFAF9]">
                                     {showPassword
                                         ? password[index]
                                         : '•'}
@@ -111,11 +111,15 @@ const PinInput = ({
                                     items-center
                                     justify-center
                                     rounded-full
-                                    bg-[#536500]
+                                    border
+                                    border-[#5E5E5E]/30
+                                    bg-black
                                     text-2xl
-                                    text-black
+                                    text-[#FCFAF9]
                                     transition-all
-                                    hover:bg-[#C7F11D]
+                                    hover:border-[#48E5C2]
+                                    hover:text-[#48E5C2]
+                                    hover:bg-[#48E5C2]/10
                                     active:scale-95
                                     disabled:cursor-not-allowed
                                     disabled:opacity-50
@@ -142,11 +146,15 @@ const PinInput = ({
                             items-center
                             justify-center
                             rounded-full
-                            bg-[#536500]
+                            border
+                            border-[#5E5E5E]/30
+                            bg-black
                             text-2xl
-                            text-black
+                            text-[#FCFAF9]
                             transition-all
-                            hover:bg-[#C7F11D]
+                            hover:border-[#48E5C2]
+                            hover:text-[#48E5C2]
+                            hover:bg-[#48E5C2]/10
                             active:scale-95
                             disabled:cursor-not-allowed
                             disabled:opacity-50
@@ -166,10 +174,10 @@ const PinInput = ({
                             items-center
                             justify-center
                             rounded-full
-                            text-gray-400
+                            text-[#5E5E5E]
                             transition-all
-                            hover:bg-white/5
-                            hover:text-white
+                            hover:bg-[#5E5E5E]/10
+                            hover:text-[#FCFAF9]
                             active:scale-95
                             disabled:cursor-not-allowed
                             disabled:opacity-30

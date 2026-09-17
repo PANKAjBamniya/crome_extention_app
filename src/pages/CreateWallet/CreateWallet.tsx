@@ -43,7 +43,7 @@ const CreateWallet = () => {
     }
 
     return (
-        <div className="relative h-screen w-full overflow-hidden bg-black text-white">
+        <div className="relative h-screen w-full overflow-hidden bg-black text-[#FCFAF9]">
 
             <div
                 className="
@@ -56,7 +56,7 @@ const CreateWallet = () => {
                     -translate-x-1/2
                     -translate-y-1/2
                     rounded-full
-                    bg-[#C7F11D]
+                    bg-[#48E5C2]
                     opacity-[0.035]
                     blur-[100px]
                 "
@@ -81,11 +81,11 @@ const CreateWallet = () => {
                     </div>
 
                     <div className="mt-5 mb-7">
-                        <h1 className="text-2xl font-semibold tracking-tight">
+                        <h1 className="text-2xl font-semibold tracking-tight text-[#FCFAF9]">
                             Create New Wallet
                         </h1>
 
-                        <p className="mt-2 text-xs leading-5 text-gray-500">
+                        <p className="mt-2 text-xs leading-5 text-[#5E5E5E]">
                             Create a new wallet and securely manage your crypto assets.
                         </p>
                     </div>
@@ -94,12 +94,12 @@ const CreateWallet = () => {
                         className="
                             rounded-xl
                             border
-                            border-[#536500]
-                            bg-[#050900]
+                            border-[#5E5E5E]/20
+                            bg-black
                             p-4
                         "
                     >
-                        <p className="mb-4 text-[10px] font-medium text-gray-500">
+                        <p className="mb-4 text-[10px] font-medium text-[#5E5E5E]">
                             YOUR WALLET WILL INCLUDE
                         </p>
 
@@ -115,19 +115,21 @@ const CreateWallet = () => {
                                         items-center
                                         justify-center
                                         rounded-lg
-                                        bg-[#C7F11D0A]
-                                        text-[#C7F11D]
+                                        border
+                                        border-[#48E5C2]/30
+                                        bg-[#48E5C2]/10
+                                        text-[#48E5C2]
                                     "
                                 >
                                     <KeyRound size={16} strokeWidth={1.5} />
                                 </div>
 
                                 <div>
-                                    <p className="text-xs font-medium text-white">
+                                    <p className="text-xs font-medium text-[#FCFAF9]">
                                         Secret Recovery Phrase
                                     </p>
 
-                                    <p className="mt-0.5 text-[10px] text-gray-500">
+                                    <p className="mt-0.5 text-[10px] text-[#5E5E5E]">
                                         A new recovery phrase for your wallet
                                     </p>
                                 </div>
@@ -144,19 +146,21 @@ const CreateWallet = () => {
                                         items-center
                                         justify-center
                                         rounded-lg
-                                        bg-[#C7F11D0A]
-                                        text-[#C7F11D]
+                                        border
+                                        border-[#48E5C2]/30
+                                        bg-[#48E5C2]/10
+                                        text-[#48E5C2]
                                     "
                                 >
                                     <ShieldCheck size={16} strokeWidth={1.5} />
                                 </div>
 
                                 <div>
-                                    <p className="text-xs font-medium text-white">
+                                    <p className="text-xs font-medium text-[#FCFAF9]">
                                         Secure Encryption
                                     </p>
 
-                                    <p className="mt-0.5 text-[10px] text-gray-500">
+                                    <p className="mt-0.5 text-[10px] text-[#5E5E5E]">
                                         Your wallet data is encrypted locally
                                     </p>
                                 </div>
@@ -173,19 +177,21 @@ const CreateWallet = () => {
                                         items-center
                                         justify-center
                                         rounded-lg
-                                        bg-[#C7F11D0A]
-                                        text-[#C7F11D]
+                                        border
+                                        border-[#48E5C2]/30
+                                        bg-[#48E5C2]/10
+                                        text-[#48E5C2]
                                     "
                                 >
                                     <Globe size={16} strokeWidth={1.5} />
                                 </div>
 
                                 <div>
-                                    <p className="text-xs font-medium text-white">
+                                    <p className="text-xs font-medium text-[#FCFAF9]">
                                         Blockchain Networks
                                     </p>
 
-                                    <p className="mt-0.5 text-[10px] text-gray-500">
+                                    <p className="mt-0.5 text-[10px] text-[#5E5E5E]">
                                         Access supported blockchain networks
                                     </p>
                                 </div>
@@ -202,19 +208,21 @@ const CreateWallet = () => {
                                         items-center
                                         justify-center
                                         rounded-lg
-                                        bg-[#C7F11D0A]
-                                        text-[#C7F11D]
+                                        border
+                                        border-[#48E5C2]/30
+                                        bg-[#48E5C2]/10
+                                        text-[#48E5C2]
                                     "
                                 >
                                     <Link size={16} strokeWidth={1.5} />
                                 </div>
 
                                 <div>
-                                    <p className="text-xs font-medium text-white">
+                                    <p className="text-xs font-medium text-[#FCFAF9]">
                                         dApp Connections
                                     </p>
 
-                                    <p className="mt-0.5 text-[10px] text-gray-500">
+                                    <p className="mt-0.5 text-[10px] text-[#5E5E5E]">
                                         Connect your wallet with Web3 apps
                                     </p>
                                 </div>
@@ -229,12 +237,12 @@ const CreateWallet = () => {
                             mt-4
                             rounded-xl
                             border
-                            border-white/5
-                            bg-white/[0.02]
+                            border-[#5E5E5E]/20
+                            bg-black
                             p-4
                         "
                     >
-                        <p className="text-[10px] leading-4 text-gray-500">
+                        <p className="text-[10px] leading-4 text-[#5E5E5E]">
                             Your recovery phrase is the only way to restore your
                             wallet. Keep it private and store it in a safe place.
                         </p>
@@ -247,7 +255,7 @@ const CreateWallet = () => {
                     className="
                         shrink-0
                         border-t
-                        border-white/5
+                        border-[#5E5E5E]/20
                         bg-black/95
                         px-5
                         pb-5
@@ -263,7 +271,7 @@ const CreateWallet = () => {
                         onClick={handleCreateWallet}
                     />
 
-                    <p className="mt-3 text-center text-[9px] leading-4 text-gray-500">
+                    <p className="mt-3 text-center text-[9px] leading-4 text-[#5E5E5E]">
                         Never share your recovery phrase with anyone.
                     </p>
                 </div>

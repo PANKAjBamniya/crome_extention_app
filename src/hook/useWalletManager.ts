@@ -13,6 +13,7 @@ import {
     hasWallets,
     findWalletByAddress,
     saveWallet,
+    deleteWallet,
     getActiveWalletId,
     getActiveAddress,
     setActiveAddress,
@@ -20,6 +21,7 @@ import {
     StoredAccountSummary,
     WalletType,
 } from '../services/walletStorage'
+import { evmWalletHandler } from '../wallet/walletHandler'
 
 export interface SaveNewWalletParams {
     secret: string
@@ -34,6 +36,14 @@ export interface UnlockResult {
     error?: string
     activeWallet?: StoredWallet
     accounts: StoredAccountSummary[]
+}
+
+export interface RevealSecretsResult {
+    success: boolean
+    error?: string
+    privateKey?: string
+    seedPhrase?: string
+    isMnemonic: boolean
 }
 
 export const useWalletManager = () => {
@@ -248,6 +258,140 @@ export const useWalletManager = () => {
         [decrypt, dispatch]
     )
 
+    /**
+     * Securely decrypts and reveals secrets (Private Key and/or SRP) for a given account address.
+     * Never logs sensitive data or persists it to disk.
+     */
+    const revealAccountSecrets = useCallback(
+        async (address: string, pin: string): Promise<RevealSecretsResult> => {
+            const wallets = await getWallets()
+            const target = wallets.find(
+                (w) => w.address.toLowerCase() === address.toLowerCase()
+            )
+
+            if (!target) {
+                return {
+                    success: false,
+                    error: 'Account not found',
+                    isMnemonic: false,
+                }
+            }
+
+            try {
+                const decrypted = await decrypt(target.encryptedData, pin)
+                if (!decrypted) {
+                    return {
+                        success: false,
+                        error: 'Incorrect PIN. Please try again.',
+                        isMnemonic: false,
+                    }
+                }
+
+                const cleanDecrypted = decrypted.trim()
+                const isMnemonic =
+                    target.type === 'mnemonic' ||
+                    cleanDecrypted.split(/\s+/).length >= 12
+
+                if (isMnemonic) {
+                    let derivedKey: string | undefined
+                    for (let idx = 0; idx < 20; idx++) {
+                        const derived = await evmWalletHandler.importWalletFromMnemonic(
+                            cleanDecrypted,
+                            idx
+                        )
+                        if (
+                            derived.address.toLowerCase() ===
+                            target.address.toLowerCase()
+                        ) {
+                            derivedKey = derived.privateKey
+                            break
+                        }
+                    }
+
+                    if (!derivedKey) {
+                        const fallback =
+                            await evmWalletHandler.importWalletFromMnemonic(
+                                cleanDecrypted,
+                                0
+                            )
+                        derivedKey = fallback.privateKey
+                    }
+
+                    return {
+                        success: true,
+                        privateKey: derivedKey,
+                        seedPhrase: cleanDecrypted,
+                        isMnemonic: true,
+                    }
+                } else {
+                    let cleanKey = cleanDecrypted
+                    if (!cleanKey.startsWith('0x')) {
+                        cleanKey = `0x${cleanKey}`
+                    }
+                    return {
+                        success: true,
+                        privateKey: cleanKey,
+                        isMnemonic: false,
+                    }
+                }
+            } catch {
+                return {
+                    success: false,
+                    error: 'Incorrect PIN. Please try again.',
+                    isMnemonic: false,
+                }
+            }
+        },
+        [decrypt]
+    )
+
+    /**
+     * Removes an account from storage safely if more than 1 account exists.
+     */
+    const removeAccount = useCallback(
+        async (address: string): Promise<{ success: boolean; error?: string }> => {
+            const wallets = await getWallets()
+            if (wallets.length <= 1) {
+                return {
+                    success: false,
+                    error: 'Cannot remove your only account.',
+                }
+            }
+
+            const target = wallets.find(
+                (w) => w.address.toLowerCase() === address.toLowerCase()
+            )
+            if (!target) {
+                return {
+                    success: false,
+                    error: 'Account not found.',
+                }
+            }
+
+            await deleteWallet(target.id)
+
+            const remainingWallets = await getWallets()
+            const accounts: StoredAccountSummary[] = remainingWallets.map((w) => ({
+                address: w.address,
+                walletName: w.walletName || w.name || 'Account 1',
+            }))
+            dispatch(setAccounts(accounts))
+
+            const activeAddr = await getActiveAddress()
+            if (activeAddr.address) {
+                dispatch(
+                    setWalletAddress({
+                        address: activeAddr.address,
+                        walletName: activeAddr.walletName,
+                    })
+                )
+            }
+
+            return { success: true }
+        },
+        [dispatch]
+    )
+
     const lock = useCallback(() => {
         dispatch(lockWalletAction())
     }, [dispatch])
@@ -263,6 +407,8 @@ export const useWalletManager = () => {
         verifyPassword,
         saveNewWallet,
         unlockWallet,
+        revealAccountSecrets,
+        removeAccount,
         lockWallet: lock,
     }
 }

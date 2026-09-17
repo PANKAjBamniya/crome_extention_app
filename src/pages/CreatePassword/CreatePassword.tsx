@@ -179,7 +179,7 @@ const CreatePassword = () => {
     }
 
     return (
-        <div className="relative h-screen w-full overflow-hidden bg-black text-white">
+        <div className="relative h-screen w-full overflow-hidden bg-black text-[#FCFAF9]">
             {/* Background Glow */}
             <div
                 className="
@@ -192,7 +192,7 @@ const CreatePassword = () => {
                     -translate-x-1/2
                     -translate-y-1/2
                     rounded-full
-                    bg-[#C7F11D]
+                    bg-[#48E5C2]
                     opacity-[0.035]
                     blur-[100px]
                 "
@@ -207,11 +207,11 @@ const CreatePassword = () => {
                 <main className="flex flex-1 flex-col overflow-hidden px-5">
                     {/* Title */}
                     <div className="mt-5 shrink-0">
-                        <h1 className="text-2xl font-semibold tracking-tight">
+                        <h1 className="text-2xl font-semibold tracking-tight text-[#FCFAF9]">
                             {getTitle()}
                         </h1>
 
-                        <p className="mt-2 text-xs leading-5 text-gray-500">
+                        <p className="mt-2 text-xs leading-5 text-[#5E5E5E]">
                             {getSubtitle()}
                         </p>
                     </div>
@@ -220,7 +220,7 @@ const CreatePassword = () => {
                     <div className="flex flex-1 items-center justify-center">
                         <div className="flex w-full flex-col items-center">
                             <div className="mb-4">
-                                <p className="text-xs font-medium text-gray-400">
+                                <p className="text-xs font-medium text-[#5E5E5E]">
                                     {hasExistingMasterPassword
                                         ? 'Enter your 6-digit PIN'
                                         : isConfirmPassword
@@ -240,7 +240,7 @@ const CreatePassword = () => {
                 </main>
 
                 {/* Bottom Action */}
-                <div className="shrink-0 border-t border-white/5 bg-black/95 px-5 pb-5 pt-3">
+                <div className="shrink-0 border-t border-[#5E5E5E]/20 bg-black/95 px-5 pb-5 pt-3">
                     <Button
                         title={
                             isSubmitting

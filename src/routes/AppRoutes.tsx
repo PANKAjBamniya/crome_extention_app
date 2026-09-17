@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../store'
 import { hasWallets } from '../services/walletStorage'
@@ -15,6 +15,8 @@ import Unlock from '../pages/Unlock/Unlock'
 import Assets from '../pages/Assets/Assets'
 import ImportToken from '../pages/Assets/ImportToken'
 import Accounts from '../pages/Accounts/Accounts'
+import AccountDetails from '../components/AccountDetails'
+import Receive from '../pages/Receive/Receive'
 import ComingSoon from '../components/ComingSoon/ComingSoon'
 
 const StartupGuard = () => {
@@ -116,6 +118,28 @@ const ProtectedWalletRoute = () => {
     return <Wallet />
 }
 
+const ProtectedAccountDetailsRoute = () => {
+    const navigate = useNavigate()
+    const isUnlocked = useSelector((state: RootState) => state.wallet.isUnlocked)
+    const address = useSelector((state: RootState) => state.wallet.address)
+    const walletName = useSelector((state: RootState) => state.wallet.walletName)
+
+    if (!isUnlocked) {
+        return <Navigate to="/unlock" replace />
+    }
+
+    if (!address) {
+        return <Navigate to="/wallet" replace />
+    }
+
+    return (
+        <AccountDetails
+            account={{ address, walletName }}
+            onClose={() => navigate(-1)}
+        />
+    )
+}
+
 const AppRoutes = () => {
     return (
         <HashRouter>
@@ -125,7 +149,9 @@ const AppRoutes = () => {
                 <Route path="/unlock" element={<Unlock />} />
                 <Route path="/wallet" element={<ProtectedWalletRoute />} />
                 <Route path="/accounts" element={<Accounts />} />
+                <Route path="/account-details" element={<ProtectedAccountDetailsRoute />} />
                 <Route path="/assets" element={<Assets />} />
+                <Route path="/receive" element={<Receive />} />
                 <Route path="/import-token" element={<ImportToken />} />
                 <Route path="/create-wallet" element={<CreateWallet />} />
                 <Route path="/import-wallet" element={<ImportWallet />} />

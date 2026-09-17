@@ -30,6 +30,8 @@ export interface AssetItem {
     rawBalance: bigint
     value: string
     logoUrl?: string
+    networkName?: string
+    networkIcon?: string
     isNative: boolean
     isCustom?: boolean
     isLoading?: boolean
