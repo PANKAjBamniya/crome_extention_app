@@ -100,6 +100,7 @@ export const Assets = () => {
                         isLoading={isLoading}
                         showBalance={true}
                         onDelete={deleteCustomToken}
+                        onAssetClick={(asset) => navigate('/token-details', { state: { token: asset } })}
                         emptyMessage="No assets match your search."
                     />
 

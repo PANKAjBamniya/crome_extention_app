@@ -219,6 +219,7 @@ const Wallet = () => {
                             isLoading={isLoading}
                             showBalance={showBalance}
                             onDelete={deleteCustomToken}
+                            onAssetClick={(asset) => navigate('/token-details', { state: { token: asset } })}
                         />
 
                         {/* Minimal Add Token Button */}

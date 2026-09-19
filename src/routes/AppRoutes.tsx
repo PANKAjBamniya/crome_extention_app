@@ -17,6 +17,7 @@ import ImportToken from '../pages/Assets/ImportToken'
 import Accounts from '../pages/Accounts/Accounts'
 import AccountDetails from '../components/AccountDetails'
 import Receive from '../pages/Receive/Receive'
+import TokenDetails from '../pages/TokenDetails/TokenDetails'
 import ComingSoon from '../components/ComingSoon/ComingSoon'
 
 const StartupGuard = () => {
@@ -151,6 +152,8 @@ const AppRoutes = () => {
                 <Route path="/accounts" element={<Accounts />} />
                 <Route path="/account-details" element={<ProtectedAccountDetailsRoute />} />
                 <Route path="/assets" element={<Assets />} />
+                <Route path="/token-details" element={<TokenDetails />} />
+                <Route path="/token-details/:tokenId" element={<TokenDetails />} />
                 <Route path="/receive" element={<Receive />} />
                 <Route path="/import-token" element={<ImportToken />} />
                 <Route path="/create-wallet" element={<CreateWallet />} />
